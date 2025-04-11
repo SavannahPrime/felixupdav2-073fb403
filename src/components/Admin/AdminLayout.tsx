@@ -14,7 +14,8 @@ import {
   Settings, 
   LogOut,
   Sun,
-  Moon
+  Moon,
+  User
 } from 'lucide-react';
 import { toast } from 'sonner';
 import TooltipWrapper from '../ui/TooltipWrapper';
@@ -104,6 +105,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, currentPath 
               label="Portfolio" 
               to="/admin/portfolio" 
               active={currentPath === '/admin/portfolio'} 
+              theme={theme}
+            />
+            <NavItem 
+              icon={<User size={20} />} 
+              label="Biography" 
+              to="/admin/bio" 
+              active={currentPath === '/admin/bio'} 
               theme={theme}
             />
             <NavItem 

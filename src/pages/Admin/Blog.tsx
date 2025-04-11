@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { BookOpen, Plus, Edit, Trash2, Check, X } from 'lucide-react';
+import { BookOpen, Plus, Edit, Trash2, Check, X, UploadCloud } from 'lucide-react';
 import { toast } from 'sonner';
 import AdminLayout from '../../components/Admin/AdminLayout';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface BlogPost {
   id: string;
@@ -30,7 +31,8 @@ const AdminBlog = () => {
   const [content, setContent] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [status, setStatus] = useState('draft');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [activeTab, setActiveTab] = useState("posts");
@@ -65,8 +67,21 @@ const AdminBlog = () => {
     setContent('');
     setTagsInput('');
     setStatus('draft');
-    setImageUrl('');
+    setImageFile(null);
+    setImagePreview('');
     setEditingPost(null);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,13 +100,31 @@ const AdminBlog = () => {
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
       
+      // Upload image if provided
+      let imageUrl = editingPost?.image_url || null;
+      
+      if (imageFile) {
+        const fileName = `blog-${Date.now()}-${imageFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('media')
+          .upload(fileName, imageFile);
+        
+        if (uploadError) throw uploadError;
+        
+        const { data: urlData } = await supabase.storage
+          .from('media')
+          .getPublicUrl(fileName);
+        
+        imageUrl = urlData.publicUrl;
+      }
+      
       if (editingPost) {
         const { error } = await supabase
           .from('blog_posts')
           .update({
             title,
             content,
-            image_url: imageUrl || null,
+            image_url: imageUrl,
             tags: tags.length > 0 ? tags : null,
             status,
             updated_at: new Date().toISOString()
@@ -107,7 +140,7 @@ const AdminBlog = () => {
             {
               title,
               content,
-              image_url: imageUrl || null,
+              image_url: imageUrl,
               tags: tags.length > 0 ? tags : null,
               status
             }
@@ -119,6 +152,7 @@ const AdminBlog = () => {
       
       resetForm();
       fetchPosts();
+      setActiveTab("posts");
       
     } catch (error) {
       console.error('Error saving blog post:', error);
@@ -134,7 +168,11 @@ const AdminBlog = () => {
     setContent(post.content);
     setTagsInput(post.tags ? post.tags.join(', ') : '');
     setStatus(post.status);
-    setImageUrl(post.image_url || '');
+    
+    if (post.image_url) {
+      setImagePreview(post.image_url);
+    }
+    
     setActiveTab("create");
   };
 
@@ -212,60 +250,73 @@ const AdminBlog = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-fashion-gold/20">
-                    <TableHead className="text-fashion-champagne/80">Title</TableHead>
-                    <TableHead className="text-fashion-champagne/80">Date</TableHead>
-                    <TableHead className="text-fashion-champagne/80">Status</TableHead>
-                    <TableHead className="text-fashion-champagne/80">Tags</TableHead>
-                    <TableHead className="text-fashion-champagne/80 text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {posts.map(post => (
-                    <TableRow key={post.id} className="border-fashion-gold/10">
-                      <TableCell className="font-medium text-fashion-champagne">{post.title}</TableCell>
-                      <TableCell className="text-fashion-champagne/80">{formatDate(post.created_at)}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          post.status === 'Published' ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'
-                        }`}>
-                          {post.status}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.map(post => (
+                <div 
+                  key={post.id}
+                  className="group bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg overflow-hidden hover:border-fashion-gold/40 transition-all duration-300"
+                >
+                  {post.image_url && (
+                    <div className="aspect-[16/9] overflow-hidden">
+                      <img 
+                        src={post.image_url} 
+                        alt={post.title} 
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        post.status === 'Published' ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'
+                      }`}>
+                        {post.status}
+                      </span>
+                      <span className="text-xs text-fashion-champagne/60">{formatDate(post.created_at)}</span>
+                    </div>
+                    
+                    <h3 className="text-xl font-serif text-fashion-champagne mb-3 truncate group-hover:text-fashion-gold transition-colors">{post.title}</h3>
+                    
+                    <p className="text-fashion-champagne/80 text-sm mb-4 line-clamp-3">
+                      {post.content.length > 150
+                        ? `${post.content.substring(0, 150)}...`
+                        : post.content}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {post.tags?.map((tag, i) => (
+                        <span key={i} className="text-xs px-2 py-0.5 bg-fashion-gold/10 text-fashion-gold/80 rounded-full">
+                          {tag}
                         </span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
-                          {post.tags?.map((tag, i) => (
-                            <span key={i} className="text-xs px-2 py-0.5 bg-fashion-gold/10 text-fashion-gold/80 rounded-full">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <button 
-                            onClick={() => handleEdit(post)}
-                            className="p-1 text-fashion-champagne/60 hover:text-fashion-gold transition-colors"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button 
-                            onClick={() => handleDelete(post.id)}
-                            className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      ))}
+                    </div>
+                    
+                    <div className="flex justify-end space-x-2">
+                      <button 
+                        onClick={() => handleEdit(post)}
+                        className="p-1 text-fashion-champagne/60 hover:text-fashion-gold transition-colors"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(post.id)}
+                        className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
+          
+          <div className="mt-8 flex justify-center">
+            <Button onClick={navigateToCreateTab} className="btn-luxury">
+              <Plus className="mr-2 h-4 w-4" />
+              Create New Post
+            </Button>
+          </div>
         </TabsContent>
         
         <TabsContent value="create">
@@ -285,9 +336,9 @@ const AdminBlog = () => {
             <form onSubmit={handleSubmit} className="space-y-6 bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
+                  <Label htmlFor="title" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
                     Title <span className="text-red-500">*</span>
-                  </label>
+                  </Label>
                   <Input
                     id="title"
                     value={title}
@@ -299,9 +350,9 @@ const AdminBlog = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="content" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
+                  <Label htmlFor="content" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
                     Content <span className="text-red-500">*</span>
-                  </label>
+                  </Label>
                   <Textarea
                     id="content"
                     value={content}
@@ -314,37 +365,67 @@ const AdminBlog = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="image_url" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
-                    Featured Image URL
-                  </label>
-                  <Input
-                    id="image_url"
-                    type="url"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="Enter image URL (optional)"
-                    className="bg-black/40 border-fashion-gold/30 text-fashion-champagne"
-                  />
-                  {imageUrl && (
-                    <div className="mt-2">
-                      <p className="text-sm text-fashion-champagne/60 mb-1">Preview:</p>
-                      <img 
-                        src={imageUrl} 
-                        alt="Preview" 
-                        className="h-24 object-cover rounded-md"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          toast.error('Invalid image URL');
-                        }}
+                  <Label className="block text-sm font-medium text-fashion-champagne/80 mb-1">
+                    Featured Image
+                  </Label>
+                  <div className="mt-1 flex flex-col space-y-4">
+                    <label className="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-fashion-gold/30 rounded-lg cursor-pointer hover:bg-fashion-gold/5 transition-colors">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <UploadCloud className="w-8 h-8 mb-2 text-fashion-champagne/70" />
+                        <p className="text-sm text-fashion-champagne">
+                          <span className="font-semibold">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-xs text-fashion-champagne/60 mt-1">
+                          PNG, JPG or WEBP (max 5MB)
+                        </p>
+                      </div>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
                       />
-                    </div>
-                  )}
+                    </label>
+                    
+                    {(imagePreview || editingPost?.image_url) && (
+                      <div className="relative">
+                        <div className="bg-black/20 border border-fashion-gold/20 rounded-lg p-2">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-20 h-20 rounded-md overflow-hidden">
+                              <img 
+                                src={imagePreview || editingPost?.image_url || ''} 
+                                alt="Preview" 
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm text-fashion-champagne mb-1">Image Preview</p>
+                              <p className="text-xs text-fashion-champagne/60">{imageFile ? imageFile.name : 'Current image'}</p>
+                            </div>
+                            <button 
+                              type="button"
+                              onClick={() => {
+                                setImageFile(null);
+                                setImagePreview('');
+                                if (editingPost) {
+                                  setEditingPost({...editingPost, image_url: null});
+                                }
+                              }}
+                              className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <div>
-                  <label htmlFor="tags" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
+                  <Label htmlFor="tags" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
                     Tags (comma separated)
-                  </label>
+                  </Label>
                   <Input
                     id="tags"
                     value={tagsInput}
@@ -355,9 +436,9 @@ const AdminBlog = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="status" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
+                  <Label htmlFor="status" className="block text-sm font-medium text-fashion-champagne/80 mb-1">
                     Status
-                  </label>
+                  </Label>
                   <div className="flex space-x-4 mt-1">
                     <label className="inline-flex items-center">
                       <input

@@ -15,6 +15,7 @@ import Volunteer from "./pages/Volunteer";
 import AdminLogin from "./pages/Admin/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import AdminPortfolio from "./pages/Admin/Portfolio";
+import AdminBio from "./pages/Admin/Bio";
 import AdminBlog from "./pages/Admin/Blog";
 import AdminProjects from "./pages/Admin/Projects";
 import AdminEvents from "./pages/Admin/Events";
@@ -43,6 +44,7 @@ const App = () => (
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/portfolio" element={<AdminPortfolio />} />
+        <Route path="/admin/bio" element={<AdminBio />} />
         <Route path="/admin/blog" element={<AdminBlog />} />
         <Route path="/admin/projects" element={<AdminProjects />} />
         <Route path="/admin/events" element={<AdminEvents />} />
