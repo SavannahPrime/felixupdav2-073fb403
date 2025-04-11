@@ -57,9 +57,15 @@ export default {
         'fashion-midnight': '#0D1117',
         'fashion-champagne': '#F6F1E9',
         'fashion-gold': '#D4AF37',
+        'fashion-silver': '#C0C0C0',
+        'fashion-purple': '#4A0E54',
+        'fashion-nebula': '#2A1B3D',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'cosmic-nebula': 'url(/nebula-texture.png)',
+        'model-felix': 'url(/lovable-uploads/97f9824b-6c53-49d0-8b3d-6288a3588b6e.png)',
+        'model-catwalk': 'url(/lovable-uploads/98b0559a-74a6-4060-b518-09ea4f08b728.png)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -90,6 +96,22 @@ export default {
           "75%": { opacity: "0.5", transform: "translate(-60%, -50%) scale(1.2)" },
           "100%": { opacity: "0", transform: "translate(-50%, -40%) scale(0.5)" },
         },
+        "runway-walk": {
+          "0%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(0)" },
+          "55%": { transform: "translateX(0) rotateY(0)" },
+          "60%": { transform: "translateX(0) rotateY(180deg)" },
+          "100%": { transform: "translateX(100%) rotateY(180deg)" },
+        },
+        "fabric-flow": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "measuring-tape": {
+          "0%": { width: "0%" },
+          "100%": { width: "100%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -97,6 +119,9 @@ export default {
         "fade-in": "fade-in 1s ease-out forwards",
         "reveal": "reveal 1.5s ease-out forwards",
         "spotlight": "spotlight 8s ease-in-out infinite",
+        "runway-walk": "runway-walk 3s ease-in-out",
+        "fabric-flow": "fabric-flow 8s ease infinite",
+        "measuring-tape": "measuring-tape 2s ease-out forwards",
       },
     },
   },

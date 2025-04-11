@@ -1,5 +1,5 @@
 
-import { Instagram, Linkedin, CircleUser } from 'lucide-react';
+import { Instagram, Linkedin, MessageCircle, CircleUser } from 'lucide-react';
 import { useState } from 'react';
 
 interface SocialMediaDockProps {
@@ -14,21 +14,38 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
       platform: 'instagram', 
       icon: Instagram, 
       url: 'https://instagram.com/felixoloo',
-      color: 'bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-500'
+      color: 'bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-500',
+      label: 'Follow on Instagram'
     },
     { 
       platform: 'tiktok', 
       icon: CircleUser, // Using CircleUser icon as a replacement for TikTok
       url: 'https://tiktok.com/@felixoloo',
-      color: 'bg-black'
+      color: 'bg-black',
+      label: 'Follow on TikTok'
     },
     { 
       platform: 'linkedin', 
       icon: Linkedin, 
       url: 'https://linkedin.com/in/felixoloo',
-      color: 'bg-blue-700'
+      color: 'bg-blue-700',
+      label: 'Connect on LinkedIn'
+    },
+    { 
+      platform: 'contact', 
+      icon: MessageCircle, 
+      url: '/contact',
+      color: 'bg-fashion-gold',
+      label: 'Contact Me'
     }
   ];
+
+  // Function to play fabric swoosh sound on hover
+  const playFabricSound = () => {
+    const audio = new Audio('/fabric-swish.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(err => console.log('Audio playback prevented:', err));
+  };
 
   return (
     <div className={`flex gap-3 ${className}`}>
@@ -36,17 +53,34 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
         <a
           key={social.platform}
           href={social.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative"
-          onMouseEnter={() => setHoveredIcon(social.platform)}
+          target={social.url.startsWith('http') ? "_blank" : undefined}
+          rel={social.url.startsWith('http') ? "noopener noreferrer" : undefined}
+          className="relative group"
+          onMouseEnter={() => {
+            setHoveredIcon(social.platform);
+            playFabricSound();
+          }}
           onMouseLeave={() => setHoveredIcon(null)}
+          aria-label={social.label}
         >
           <div className={`
-            rounded-full p-2 border border-fashion-gold/30 transition-all duration-300
-            ${hoveredIcon === social.platform ? 'bg-fashion-gold text-fashion-midnight transform scale-110' : 'bg-fashion-midnight/40 backdrop-blur-sm text-fashion-gold'} 
+            rounded-full p-2.5 border transition-all duration-300
+            ${hoveredIcon === social.platform 
+              ? 'border-fashion-gold bg-fashion-gold text-fashion-midnight transform scale-110 shadow-[0_0_15px_rgba(212,175,55,0.5)]' 
+              : 'border-fashion-gold/30 bg-fashion-midnight/40 backdrop-blur-sm text-fashion-gold'} 
           `}>
             <social.icon className="w-5 h-5" />
+            
+            {/* Platform label that appears on hover */}
+            <span className={`
+              absolute left-full ml-2 whitespace-nowrap text-xs px-2 py-1 
+              bg-fashion-midnight/80 text-fashion-champagne rounded
+              border border-fashion-gold/20 backdrop-blur-sm
+              transition-all duration-300
+              ${hoveredIcon === social.platform ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 pointer-events-none'}
+            `}>
+              {social.label}
+            </span>
             
             {/* Platform-specific hover effects */}
             {hoveredIcon === 'instagram' && (
@@ -63,6 +97,9 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
             )}
             {hoveredIcon === 'linkedin' && (
               <span className="absolute inset-0 rounded-full animate-pulse bg-fashion-gold/10"></span>
+            )}
+            {hoveredIcon === 'contact' && (
+              <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-fashion-gold/60"></span>
             )}
           </div>
         </a>
