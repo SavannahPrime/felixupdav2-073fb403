@@ -1,361 +1,237 @@
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { CalendarRange, Send, CheckCircle } from 'lucide-react';
+import { useState, useEffect, FormEvent } from 'react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-
-// Sample projects data (in a real app, this would come from the same source as ProjectsList)
-const PROJECTS = [
-  {
-    id: 1,
-    title: "African Fashion Initiative",
-    startDate: "January 2025",
-    endDate: "December 2025",
-    location: "Nairobi & Paris",
-  },
-  {
-    id: 2,
-    title: "Sustainable Fashion Showcase",
-    startDate: "June 2025",
-    endDate: "July 2025",
-    location: "London",
-  }
-];
-
-const volunteerFormSchema = z.object({
-  firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
-  lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().min(10, { message: "Please enter a valid phone number." }),
-  projectId: z.number({ required_error: "Please select a project." }),
-  experience: z.string().optional(),
-  skills: z.string().min(10, { message: "Please describe your relevant skills and experience." }),
-  availability: z.array(z.string()).min(1, { message: "Please select at least one availability option." }),
-  agreeTerms: z.boolean().refine(val => val === true, {
-    message: "You must agree to the terms and conditions."
-  }),
-});
-
-type VolunteerFormValues = z.infer<typeof volunteerFormSchema>;
+type Project = {
+  id: string;
+  title: string;
+  status: string;
+};
 
 const VolunteerForm = () => {
-  const [submitting, setSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  
-  const form = useForm<VolunteerFormValues>({
-    resolver: zodResolver(volunteerFormSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      projectId: 0,
-      experience: "",
-      skills: "",
-      availability: [],
-      agreeTerms: false,
-    },
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [selectedProject, setSelectedProject] = useState('');
+  const [availability, setAvailability] = useState<string[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const onSubmit = (data: VolunteerFormValues) => {
-    setSubmitting(true);
+  // Fetch available projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('projects')
+          .select('id, title, status')
+          .or('status.eq.ongoing,status.eq.upcoming')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        setProjects(data || []);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        toast.error('Failed to load projects');
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // In a real app, this would be an API call to your backend
-    console.log("Volunteer data:", data);
-    
-    // Simulate API delay
-    setTimeout(() => {
-      setSubmitting(false);
-      setIsSuccess(true);
-      toast.success("Thank you for volunteering! We'll be in touch soon.");
-    }, 1500);
+    fetchProjects();
+  }, []);
+
+  const handleAvailabilityChange = (option: string) => {
+    setAvailability(prev => 
+      prev.includes(option)
+        ? prev.filter(item => item !== option)
+        : [...prev, option]
+    );
   };
 
-  if (isSuccess) {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!name || !email) {
+      toast.error('Please provide your name and email');
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    
+    // Project validation
+    if (!selectedProject) {
+      toast.error('Please select a project');
+      return;
+    }
+    
+    // Availability validation
+    if (availability.length === 0) {
+      toast.error('Please select at least one availability option');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Submit to Supabase
+      const { error } = await supabase.from('volunteers').insert([
+        { 
+          name, 
+          email, 
+          phone: phone || null, 
+          project_id: selectedProject,
+          availability
+        }
+      ]);
+      
+      if (error) throw error;
+      
+      // Success!
+      toast.success('Thank you for volunteering! We will contact you soon.');
+      
+      // Clear the form
+      setName('');
+      setEmail('');
+      setPhone('');
+      setSelectedProject('');
+      setAvailability([]);
+    } catch (error) {
+      console.error('Error submitting volunteer form:', error);
+      toast.error('There was an error submitting your application. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="max-w-2xl mx-auto bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-8">
-        <div className="text-center space-y-6">
-          <div className="mx-auto w-16 h-16 bg-fashion-gold/20 rounded-full flex items-center justify-center">
-            <CheckCircle size={32} className="text-fashion-gold" />
-          </div>
-          <h3 className="text-2xl font-serif text-fashion-champagne">Thank You for Volunteering!</h3>
-          <p className="text-fashion-champagne/80">
-            Your application has been received and will be reviewed by our team. 
-            We'll reach out to you soon with more information about the next steps.
-          </p>
-          <button 
-            onClick={() => setIsSuccess(false)}
-            className="btn-luxury py-2 px-6 inline-block mt-4"
-          >
-            Register for Another Project
-          </button>
-        </div>
+      <div className="text-center py-12">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-fashion-gold border-r-transparent"></div>
+        <p className="mt-4 text-fashion-champagne/80">Loading available projects...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-8">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6 md:p-8">
+      <h3 className="text-2xl font-serif text-fashion-gold mb-6">Volunteer Application</h3>
+      
+      {projects.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-fashion-champagne/80 mb-4">There are no active projects available for volunteering at the moment.</p>
+          <p className="text-fashion-champagne/60">Please check back later for new opportunities.</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-fashion-champagne/80">First Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="John" 
-                      {...field} 
-                      className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <label htmlFor="name" className="block text-sm text-fashion-champagne/80">Full Name <span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-black/40 border border-fashion-gold/30 rounded px-4 py-2 text-fashion-champagne focus:outline-none focus:ring-1 focus:ring-fashion-gold/50"
+                required
+              />
+            </div>
             
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-fashion-champagne/80">Last Name</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Doe" 
-                      {...field} 
-                      className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm text-fashion-champagne/80">Email Address <span className="text-red-500">*</span></label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black/40 border border-fashion-gold/30 rounded px-4 py-2 text-fashion-champagne focus:outline-none focus:ring-1 focus:ring-fashion-gold/50"
+                required
+              />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="phone" className="block text-sm text-fashion-champagne/80">Phone Number (optional)</label>
+            <input
+              type="tel"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full bg-black/40 border border-fashion-gold/30 rounded px-4 py-2 text-fashion-champagne focus:outline-none focus:ring-1 focus:ring-fashion-gold/50"
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-fashion-champagne/80">Email</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="email" 
-                      placeholder="john.doe@example.com" 
-                      {...field} 
-                      className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-fashion-champagne/80">Phone Number</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="+1 (123) 456-7890" 
-                      {...field} 
-                      className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <FormField
-            control={form.control}
-            name="projectId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-fashion-champagne/80">Select Project</FormLabel>
-                <div className="space-y-4">
-                  {PROJECTS.map((project) => (
-                    <div 
-                      key={project.id}
-                      className={`flex p-4 border rounded-md cursor-pointer transition-all ${
-                        field.value === project.id 
-                          ? 'border-fashion-gold bg-fashion-gold/10' 
-                          : 'border-fashion-gold/20 bg-black/20 hover:bg-black/40'
-                      }`}
-                      onClick={() => form.setValue('projectId', project.id)}
-                    >
-                      <div className="flex-grow">
-                        <h4 className="text-fashion-champagne font-medium">{project.title}</h4>
-                        <div className="flex items-center mt-1 text-xs text-fashion-champagne/60">
-                          <CalendarRange size={14} className="mr-1" />
-                          {project.startDate} - {project.endDate} • {project.location}
-                        </div>
-                      </div>
-                      <div className="flex items-center ml-4">
-                        <div className={`w-5 h-5 rounded-full border ${
-                          field.value === project.id 
-                            ? 'border-fashion-gold' 
-                            : 'border-fashion-gold/30'
-                        }`}>
-                          {field.value === project.id && (
-                            <div className="w-3 h-3 rounded-full bg-fashion-gold m-1"></div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="experience"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-fashion-champagne/80">Previous Volunteer Experience (optional)</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Tell us about any previous volunteer work you've done..." 
-                    {...field} 
-                    className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50 min-h-[80px]"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="skills"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-fashion-champagne/80">Relevant Skills & Experience</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Describe your skills and how they could contribute to the project..." 
-                    {...field} 
-                    className="bg-black/40 border-fashion-gold/30 text-fashion-champagne placeholder:text-fashion-champagne/50 focus:border-fashion-gold/50 min-h-[120px]"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="availability"
-            render={() => (
-              <FormItem>
-                <FormLabel className="text-fashion-champagne/80">Availability</FormLabel>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                  {['Weekdays', 'Evenings', 'Weekends', 'Full-time'].map((option) => (
-                    <FormField
-                      key={option}
-                      control={form.control}
-                      name="availability"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={option}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(option)}
-                                onCheckedChange={(checked) => {
-                                  checked
-                                    ? field.onChange([...field.value, option])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== option
-                                        )
-                                      )
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal text-fashion-champagne/80">
-                              {option}
-                            </FormLabel>
-                          </FormItem>
-                        )
-                      }}
-                    />
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="agreeTerms"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-fashion-gold/20 p-4">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="font-normal text-fashion-champagne/80">
-                    I agree to the volunteer terms and conditions and understand my information will be stored securely.
-                  </FormLabel>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <div className="flex justify-center">
-            <button 
-              type="submit" 
-              className="btn-luxury py-2 px-8 flex items-center"
-              disabled={submitting}
+          <div className="space-y-2">
+            <label htmlFor="project" className="block text-sm text-fashion-champagne/80">Select Project <span className="text-red-500">*</span></label>
+            <select
+              id="project"
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+              className="w-full bg-black/40 border border-fashion-gold/30 rounded px-4 py-2 text-fashion-champagne focus:outline-none focus:ring-1 focus:ring-fashion-gold/50"
+              required
             >
-              {submitting ? (
-                <>
-                  <span className="mr-2">Submitting</span>
-                  <div className="h-4 w-4 rounded-full border-2 border-fashion-gold border-t-transparent animate-spin"></div>
-                </>
-              ) : (
-                <>
-                  <Send size={16} className="mr-2" />
-                  Submit Application
-                </>
-              )}
-            </button>
+              <option value="">Select a project</option>
+              {projects.map(project => (
+                <option key={project.id} value={project.id}>
+                  {project.title} ({project.status.charAt(0).toUpperCase() + project.status.slice(1)})
+                </option>
+              ))}
+            </select>
           </div>
+          
+          <div className="space-y-3">
+            <label className="block text-sm text-fashion-champagne/80">Availability <span className="text-red-500">*</span></label>
+            
+            <div className="flex flex-wrap gap-3">
+              {['Weekdays', 'Evenings', 'Weekends', 'Full-time'].map(option => (
+                <label key={option} className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={availability.includes(option)}
+                    onChange={() => handleAvailabilityChange(option)}
+                    className="sr-only"
+                  />
+                  <span className={`cursor-pointer px-3 py-1 rounded-full text-sm ${
+                    availability.includes(option)
+                      ? 'bg-fashion-gold/20 text-fashion-gold border border-fashion-gold/30'
+                      : 'bg-black/40 text-fashion-champagne/80 border border-fashion-gold/10 hover:border-fashion-gold/30'
+                  }`}>
+                    {option}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          <button
+            type="submit"
+            className="btn-luxury w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <span>Submitting...</span>
+                <div className="ml-2 h-4 w-4 rounded-full border-2 border-fashion-gold border-t-transparent animate-spin"></div>
+              </div>
+            ) : (
+              'Submit Application'
+            )}
+          </button>
+          
+          <p className="text-sm text-fashion-champagne/60 text-center">
+            By submitting this form, you agree to be contacted about volunteer opportunities.
+          </p>
         </form>
-      </Form>
+      )}
     </div>
   );
 };

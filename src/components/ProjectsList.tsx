@@ -1,55 +1,72 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CalendarCheck, Users, Globe, ArrowUpRight } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
-// Sample projects data (in a real app, this would come from a database)
-const PROJECTS = [
-  {
-    id: 1,
-    title: "African Fashion Initiative",
-    description: "A mentorship program aimed at supporting emerging African designers and models to gain international exposure.",
-    image: "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png",
-    status: "ongoing",
-    startDate: "January 2025",
-    endDate: "December 2025",
-    participants: 24,
-    location: "Nairobi & Paris",
-    website: "#",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "Sustainable Fashion Showcase",
-    description: "An exhibition featuring sustainable and eco-friendly fashion designs from around the world.",
-    image: "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png",
-    status: "upcoming",
-    startDate: "June 2025",
-    endDate: "July 2025",
-    participants: 15,
-    location: "London",
-    website: "#"
-  },
-  {
-    id: 3,
-    title: "Youth Model Development Workshop",
-    description: "A series of workshops teaching young aspiring models the fundamentals of the modeling industry.",
-    image: "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png",
-    status: "completed",
-    startDate: "October 2024",
-    endDate: "December 2024",
-    participants: 50,
-    location: "Virtual & New York",
-    website: "#"
-  }
-];
+// Project type definition
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image_url?: string;
+  status: string;
+  duration: string | null;
+  location: string | null;
+  volunteers_count: number;
+  created_at: string;
+}
 
 const ProjectsList = () => {
   const [statusFilter, setStatusFilter] = useState('all');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   
-  // Filter projects by status
-  const filteredProjects = PROJECTS.filter(project => {
-    return statusFilter === 'all' || project.status === statusFilter;
-  });
+  // Fetch projects from Supabase
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          throw error;
+        }
+        
+        setProjects(data || []);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        toast.error('Failed to load projects');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProjects();
+  }, []);
+  
+  // Filter projects when filter or data changes
+  useEffect(() => {
+    if (statusFilter === 'all') {
+      setFilteredProjects(projects);
+    } else {
+      setFilteredProjects(projects.filter(project => project.status === statusFilter));
+    }
+  }, [statusFilter, projects]);
+
+  if (loading) {
+    return (
+      <div className="space-y-10">
+        <div className="flex justify-center py-16">
+          <div className="h-12 w-12 rounded-full border-4 border-fashion-gold border-t-transparent animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
@@ -83,28 +100,31 @@ const ProjectsList = () => {
       </div>
       
       <div className="space-y-8">
-        {filteredProjects.map(project => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-        
-        {filteredProjects.length === 0 && (
+        {filteredProjects.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-fashion-champagne/60">No projects found matching your criteria.</p>
           </div>
+        ) : (
+          filteredProjects.map(project => (
+            <ProjectCard key={project.id} project={project} />
+          ))
         )}
       </div>
     </div>
   );
 };
 
-const ProjectCard = ({ project }: { project: typeof PROJECTS[number] }) => {
+const ProjectCard = ({ project }: { project: Project }) => {
+  // Default image if none is provided
+  const imageUrl = project.image_url || "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png";
+  
   return (
-    <div className={`bg-black/30 backdrop-blur-md border ${project.featured ? 'border-fashion-gold/30' : 'border-fashion-gold/10'} rounded-lg overflow-hidden`}>
+    <div className={`bg-black/30 backdrop-blur-md border border-fashion-gold/10 rounded-lg overflow-hidden`}>
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3">
           <div className="h-full">
             <img 
-              src={project.image} 
+              src={imageUrl} 
               alt={project.title} 
               className="w-full h-full object-cover"
             />
@@ -130,7 +150,7 @@ const ProjectCard = ({ project }: { project: typeof PROJECTS[number] }) => {
               <CalendarCheck size={16} className="text-fashion-gold mr-2" />
               <div>
                 <p className="text-xs text-fashion-champagne/60">Duration</p>
-                <p className="text-sm">{project.startDate} - {project.endDate}</p>
+                <p className="text-sm">{project.duration || 'Not specified'}</p>
               </div>
             </div>
             
@@ -138,7 +158,7 @@ const ProjectCard = ({ project }: { project: typeof PROJECTS[number] }) => {
               <Users size={16} className="text-fashion-gold mr-2" />
               <div>
                 <p className="text-xs text-fashion-champagne/60">Participants</p>
-                <p className="text-sm">{project.participants} people</p>
+                <p className="text-sm">{project.volunteers_count} people</p>
               </div>
             </div>
             
@@ -146,7 +166,7 @@ const ProjectCard = ({ project }: { project: typeof PROJECTS[number] }) => {
               <Globe size={16} className="text-fashion-gold mr-2" />
               <div>
                 <p className="text-xs text-fashion-champagne/60">Location</p>
-                <p className="text-sm">{project.location}</p>
+                <p className="text-sm">{project.location || 'Not specified'}</p>
               </div>
             </div>
           </div>
@@ -161,8 +181,8 @@ const ProjectCard = ({ project }: { project: typeof PROJECTS[number] }) => {
               <span className="text-fashion-champagne/60 text-sm">This project has been completed</span>
             )}
             
-            <a href={project.website} className="flex items-center text-fashion-gold hover:text-fashion-champagne transition-colors text-sm">
-              Visit Website <ArrowUpRight size={16} className="ml-1" />
+            <a href="#" className="flex items-center text-fashion-gold hover:text-fashion-champagne transition-colors text-sm">
+              Learn More <ArrowUpRight size={16} className="ml-1" />
             </a>
           </div>
         </div>

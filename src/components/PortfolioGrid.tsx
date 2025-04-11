@@ -1,89 +1,74 @@
 
 import { useState, useEffect } from 'react';
 import SocialMediaDock from './SocialMediaDock';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 // Portfolio item type
 type PortfolioItem = {
-  id: number;
-  image: string;
+  id: string;
+  image_url: string;
   title: string;
   category: string;
-  year: string;
+  created_at: string;
 };
-
-// Updated portfolio data with real images
-const portfolioData: PortfolioItem[] = [
-  {
-    id: 1,
-    image: '/lovable-uploads/9600aaa4-5bb4-4bdb-93ca-562173f75595.png',
-    title: 'Gold Embroidered Blazer',
-    category: 'Editorial',
-    year: '2023'
-  },
-  {
-    id: 2,
-    image: '/lovable-uploads/d84b534c-49f4-4672-80f7-990b985019d5.png',
-    title: 'White Shirt Collection',
-    category: 'Campaign',
-    year: '2023'
-  },
-  {
-    id: 3,
-    image: '/lovable-uploads/4d1929d1-adf1-4865-97a9-22d22af1c1d1.png',
-    title: 'Classic White Editorial',
-    category: 'Editorial',
-    year: '2022'
-  },
-  {
-    id: 4,
-    image: '/lovable-uploads/5d037160-aa01-4367-9f3f-5c8101a53c4d.png',
-    title: 'White T-shirt & Red Pants',
-    category: 'Casual',
-    year: '2022'
-  },
-  {
-    id: 5,
-    image: '/lovable-uploads/b5e0ae0a-f42d-4f90-9c71-c942c8396fb9.png',
-    title: 'Classic Suit',
-    category: 'Formal',
-    year: '2022'
-  },
-  {
-    id: 6,
-    image: '/lovable-uploads/a671db4d-5885-4137-a634-b7c4ef41f750.png',
-    title: 'Red Carpet Look',
-    category: 'Event',
-    year: '2021'
-  },
-  {
-    id: 7,
-    image: '/lovable-uploads/0ad5f131-f472-411a-b89f-b07ffc30650e.png',
-    title: 'Night Shot',
-    category: 'Editorial',
-    year: '2021'
-  },
-  {
-    id: 8,
-    image: '/lovable-uploads/95a08c59-04c1-4ad5-9d37-f204145413e3.png',
-    title: 'Contemplative',
-    category: 'Portrait',
-    year: '2021'
-  }
-];
 
 const PortfolioGrid = () => {
   const [filter, setFilter] = useState<string>('all');
-  const [filteredItems, setFilteredItems] = useState<PortfolioItem[]>(portfolioData);
+  const [portfolioData, setPortfolioData] = useState<PortfolioItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<PortfolioItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>([]);
   
+  // Fetch portfolio data from Supabase
+  useEffect(() => {
+    const fetchPortfolioItems = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('portfolio_items')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          throw error;
+        }
+        
+        // Filter out items without images
+        const validItems = data?.filter(item => item.image_url) || [];
+        setPortfolioData(validItems);
+        
+        // Extract unique categories
+        const uniqueCategories = Array.from(
+          new Set(validItems.map(item => item.category).filter(Boolean))
+        ) as string[];
+        
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error('Error fetching portfolio data:', error);
+        toast.error('Failed to load portfolio items');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolioItems();
+  }, []);
+  
+  // Filter items when filter or data changes
   useEffect(() => {
     if (filter === 'all') {
       setFilteredItems(portfolioData);
     } else {
-      setFilteredItems(portfolioData.filter(item => item.category.toLowerCase() === filter.toLowerCase()));
+      setFilteredItems(
+        portfolioData.filter(item => 
+          item.category?.toLowerCase() === filter.toLowerCase()
+        )
+      );
     }
-  }, [filter]);
+  }, [filter, portfolioData]);
 
   const handleItemClick = (item: PortfolioItem) => {
     setSelectedItem(item);
@@ -93,7 +78,19 @@ const PortfolioGrid = () => {
     setSelectedItem(null);
   };
 
-  const categories = Array.from(new Set(portfolioData.map(item => item.category)));
+  // Fallback for empty or loading state
+  if (loading) {
+    return (
+      <section id="portfolio" className="py-20 relative">
+        <div className="luxury-container">
+          <h2 className="section-title mb-16">Portfolio</h2>
+          <div className="flex justify-center py-20">
+            <div className="h-12 w-12 rounded-full border-4 border-fashion-gold border-t-transparent animate-spin"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="portfolio" className="py-20 relative">
@@ -120,45 +117,55 @@ const PortfolioGrid = () => {
         </div>
         
         {/* Portfolio grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map(item => (
-            <div 
-              key={item.id}
-              className="portfolio-item group relative overflow-hidden cursor-pointer transition-all duration-500 bg-black"
-              onClick={() => handleItemClick(item)}
-              onMouseEnter={() => setHoveredItem(item.id)}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              <img 
-                src={item.image} 
-                alt={item.title} 
-                className="w-full h-[400px] object-cover transition-all duration-500"
-                style={{ 
-                  transform: hoveredItem === item.id ? 'perspective(1000px) rotateX(0deg)' : 'perspective(1000px) rotateX(15deg)',
-                  transformOrigin: 'bottom',
-                  opacity: hoveredItem === item.id ? 0.8 : 1
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-fashion-midnight opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                <h3 className="text-xl font-serif text-fashion-champagne">{item.title}</h3>
-                <div className="flex justify-between mt-2">
-                  <span className="text-sm text-fashion-gold">{item.category}</span>
-                  <span className="text-sm text-fashion-champagne/70">{item.year}</span>
+        {filteredItems.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-fashion-champagne/70">No portfolio items found in this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map(item => (
+              <div 
+                key={item.id}
+                className="portfolio-item group relative overflow-hidden cursor-pointer transition-all duration-500 bg-black"
+                onClick={() => handleItemClick(item)}
+                onMouseEnter={() => setHoveredItem(item.id)}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                <img 
+                  src={item.image_url} 
+                  alt={item.title} 
+                  className="w-full h-[400px] object-cover transition-all duration-500"
+                  style={{ 
+                    transform: hoveredItem === item.id ? 'perspective(1000px) rotateX(0deg)' : 'perspective(1000px) rotateX(15deg)',
+                    transformOrigin: 'bottom',
+                    opacity: hoveredItem === item.id ? 0.8 : 1
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-fashion-midnight opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                  <h3 className="text-xl font-serif text-fashion-champagne">{item.title}</h3>
+                  <div className="flex justify-between mt-2">
+                    <span className="text-sm text-fashion-gold">{item.category}</span>
+                    <span className="text-sm text-fashion-champagne/70">
+                      {new Date(item.created_at).getFullYear().toString()}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Social Media Dock */}
+                <div className={`absolute top-4 right-4 opacity-0 transition-all duration-300 ${hoveredItem === item.id ? 'opacity-100 translate-y-0' : 'translate-y-2'}`}>
+                  <SocialMediaDock />
                 </div>
               </div>
-              
-              {/* Social Media Dock */}
-              <div className={`absolute top-4 right-4 opacity-0 transition-all duration-300 ${hoveredItem === item.id ? 'opacity-100 translate-y-0' : 'translate-y-2'}`}>
-                <SocialMediaDock />
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
         
         {/* Load more button */}
-        <div className="mt-16 text-center">
-          <button className="btn-luxury">View More</button>
-        </div>
+        {filteredItems.length > 0 && (
+          <div className="mt-16 text-center">
+            <button className="btn-luxury">View More</button>
+          </div>
+        )}
       </div>
       
       {/* Modal for enlarged portfolio item */}
@@ -175,7 +182,7 @@ const PortfolioGrid = () => {
           </button>
           <div className="max-w-4xl w-full">
             <img 
-              src={selectedItem.image} 
+              src={selectedItem.image_url} 
               alt={selectedItem.title} 
               className="w-full max-h-[80vh] object-contain"
             />
@@ -184,7 +191,9 @@ const PortfolioGrid = () => {
                 <h3 className="text-2xl font-serif text-fashion-champagne">{selectedItem.title}</h3>
                 <div className="flex gap-4 mt-2">
                   <span className="text-fashion-gold">{selectedItem.category}</span>
-                  <span className="text-fashion-champagne/70">{selectedItem.year}</span>
+                  <span className="text-fashion-champagne/70">
+                    {new Date(selectedItem.created_at).getFullYear().toString()}
+                  </span>
                 </div>
               </div>
               <SocialMediaDock />
