@@ -2,7 +2,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
+  darkMode: ["class", ".dark-mode"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -54,12 +54,12 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         // Fashion model portfolio specific colors
-        'fashion-midnight': '#0D1117',
-        'fashion-champagne': '#F6F1E9',
-        'fashion-gold': '#D4AF37',
-        'fashion-silver': '#C0C0C0',
-        'fashion-purple': '#4A0E54',
-        'fashion-nebula': '#2A1B3D',
+        'fashion-midnight': 'var(--fashion-midnight, #0D1117)',
+        'fashion-champagne': 'var(--fashion-champagne, #F6F1E9)',
+        'fashion-gold': 'var(--fashion-gold, #D4AF37)',
+        'fashion-silver': 'var(--fashion-silver, #C0C0C0)',
+        'fashion-purple': 'var(--fashion-purple, #4A0E54)',
+        'fashion-nebula': 'var(--fashion-nebula, #2A1B3D)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

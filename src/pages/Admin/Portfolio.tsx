@@ -30,6 +30,7 @@ const AdminPortfolio = () => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
+  const [activeTab, setActiveTab] = useState("gallery");
 
   // Fetch portfolio items on component mount
   useEffect(() => {
@@ -153,6 +154,7 @@ const AdminPortfolio = () => {
     setTitle(item.title);
     setDescription(item.description || '');
     setCategory(item.category || '');
+    setActiveTab("upload");
   };
 
   const handleDelete = async (id: string, imageUrl: string | null) => {
@@ -192,9 +194,17 @@ const AdminPortfolio = () => {
     }
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  const navigateToUploadTab = () => {
+    setActiveTab("upload");
+  };
+
   return (
     <AdminLayout title="Portfolio Management" currentPath={location.pathname}>
-      <Tabs defaultValue="gallery" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
           <TabsTrigger value="gallery">Gallery</TabsTrigger>
           <TabsTrigger value="upload">Upload New</TabsTrigger>
@@ -221,7 +231,7 @@ const AdminPortfolio = () => {
               <h3 className="mt-2 text-lg font-medium text-fashion-champagne">No portfolio items</h3>
               <p className="mt-1 text-fashion-champagne/60">Get started by uploading your first portfolio item</p>
               <div className="mt-6">
-                <Button variant="outline" onClick={() => document.querySelector('[data-state="inactive"][value="upload"]')?.click()}>
+                <Button variant="outline" onClick={navigateToUploadTab}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add Item
                 </Button>

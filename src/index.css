@@ -99,6 +99,15 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-bold;
   }
+  
+  .light-mode {
+    --fashion-midnight: #f8f9fa;
+    --fashion-champagne: #4a5568;
+    --fashion-gold: #d97706;
+    --fashion-silver: #a0aec0;
+    --fashion-purple: #8b5cf6;
+    --fashion-nebula: #e9d8fd;
+  }
 }
 
 @layer components {
@@ -165,6 +174,10 @@
   .btn-luxury {
     @apply px-6 py-3 border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/10 
            transition-all duration-300 uppercase tracking-wider text-sm font-sans;
+  }
+  
+  .light-mode .btn-luxury {
+    @apply border-amber-600 text-amber-700 hover:bg-amber-50;
   }
 }
 

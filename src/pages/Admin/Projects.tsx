@@ -34,6 +34,7 @@ const AdminProjects = () => {
   const [volunteersCount, setVolunteersCount] = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [activeTab, setActiveTab] = useState("list");
 
   useEffect(() => {
     fetchProjects();
@@ -133,6 +134,7 @@ const AdminProjects = () => {
     setProjectStatus(project.status);
     setProjectLocation(project.location || '');
     setVolunteersCount(project.volunteers_count);
+    setActiveTab("create");
   };
 
   const handleDelete = async (id: string) => {
@@ -156,9 +158,17 @@ const AdminProjects = () => {
     }
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  const navigateToCreateTab = () => {
+    setActiveTab("create");
+  };
+
   return (
     <AdminLayout title="Projects Management" currentPath={location.pathname}>
-      <Tabs defaultValue="list" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
           <TabsTrigger value="list">All Projects</TabsTrigger>
           <TabsTrigger value="create">Create New</TabsTrigger>
@@ -185,7 +195,7 @@ const AdminProjects = () => {
               <h3 className="mt-2 text-lg font-medium text-fashion-champagne">No projects</h3>
               <p className="mt-1 text-fashion-champagne/60">Get started by creating your first project</p>
               <div className="mt-6">
-                <Button variant="outline" onClick={() => document.querySelector('[data-state="inactive"][value="create"]')?.click()}>
+                <Button variant="outline" onClick={navigateToCreateTab}>
                   <Plus className="mr-2 h-4 w-4" />
                   Create Project
                 </Button>

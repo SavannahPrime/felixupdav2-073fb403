@@ -33,6 +33,7 @@ const AdminBlog = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [activeTab, setActiveTab] = useState("posts");
 
   useEffect(() => {
     fetchPosts();
@@ -134,6 +135,7 @@ const AdminBlog = () => {
     setTagsInput(post.tags ? post.tags.join(', ') : '');
     setStatus(post.status);
     setImageUrl(post.image_url || '');
+    setActiveTab("create");
   };
 
   const handleDelete = async (id: string) => {
@@ -166,9 +168,17 @@ const AdminBlog = () => {
     });
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
+  const navigateToCreateTab = () => {
+    setActiveTab("create");
+  };
+
   return (
     <AdminLayout title="Blog Management" currentPath={location.pathname}>
-      <Tabs defaultValue="posts" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
           <TabsTrigger value="posts">All Posts</TabsTrigger>
           <TabsTrigger value="create">Create New</TabsTrigger>
@@ -195,7 +205,7 @@ const AdminBlog = () => {
               <h3 className="mt-2 text-lg font-medium text-fashion-champagne">No blog posts</h3>
               <p className="mt-1 text-fashion-champagne/60">Get started by creating your first blog post</p>
               <div className="mt-6">
-                <Button variant="outline" onClick={() => document.querySelector('[data-state="inactive"][value="create"]')?.click()}>
+                <Button variant="outline" onClick={navigateToCreateTab}>
                   <Plus className="mr-2 h-4 w-4" />
                   Create Post
                 </Button>
