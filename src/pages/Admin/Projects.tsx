@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FolderPlus, Calendar, Users, Globe, Plus, Edit, Trash2, Check, X, Upload, Video, Image } from 'lucide-react';
@@ -89,7 +88,6 @@ const AdminProjects = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file type
     const fileType = file.type.split('/')[0];
     if (fileType !== 'image' && fileType !== 'video') {
       toast.error('Only image or video files are allowed');
@@ -99,7 +97,6 @@ const AdminProjects = () => {
     setMediaFile(file);
     setMediaType(fileType);
 
-    // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setMediaPreview(reader.result as string);
@@ -115,20 +112,15 @@ const AdminProjects = () => {
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `projects/${fileName}`;
       
-      // Upload file to Supabase Storage
       const { error: uploadError, data } = await supabase.storage
         .from('media')
         .upload(filePath, mediaFile, {
           cacheControl: '3600',
-          upsert: false,
-          onUploadProgress: (progress) => {
-            setUploadProgress((progress.loaded / progress.total) * 100);
-          }
+          upsert: false
         });
       
       if (uploadError) throw uploadError;
       
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('media')
         .getPublicUrl(filePath);
@@ -152,7 +144,6 @@ const AdminProjects = () => {
     try {
       setSubmitting(true);
       
-      // Upload media if selected
       let mediaUrl = null;
       if (mediaFile) {
         mediaUrl = await uploadMedia();
@@ -231,14 +222,12 @@ const AdminProjects = () => {
     }
     
     try {
-      // First get the project to check if it has media
       const { data: project } = await supabase
         .from('projects')
         .select('media_url')
         .eq('id', id)
         .single();
       
-      // Delete the project
       const { error } = await supabase
         .from('projects')
         .delete()
@@ -246,9 +235,7 @@ const AdminProjects = () => {
         
       if (error) throw error;
 
-      // If the project had media, delete it from storage
       if (project?.media_url) {
-        // Extract file path from the URL
         const url = new URL(project.media_url);
         const filePath = url.pathname.split('/').slice(-2).join('/');
         
