@@ -20,6 +20,7 @@ import AdminBlog from './pages/Admin/Blog';
 import AdminProjects from './pages/Admin/Projects';
 import AdminVolunteers from './pages/Admin/Volunteers';
 import AdminMessages from './pages/Admin/Messages';
+import AdminSettings from './pages/Admin/Settings';
 
 const CustomApp: React.FC = () => {
   return (
@@ -40,6 +41,7 @@ const CustomApp: React.FC = () => {
         <Route path="/admin/projects" element={<AdminProjects />} />
         <Route path="/admin/volunteers" element={<AdminVolunteers />} />
         <Route path="/admin/messages" element={<AdminMessages />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
