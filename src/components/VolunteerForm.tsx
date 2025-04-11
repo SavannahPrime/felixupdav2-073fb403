@@ -45,8 +45,8 @@ const volunteerFormSchema = z.object({
   experience: z.string().optional(),
   skills: z.string().min(10, { message: "Please describe your relevant skills and experience." }),
   availability: z.array(z.string()).min(1, { message: "Please select at least one availability option." }),
-  agreeTerms: z.literal(true, {
-    errorMap: () => ({ message: "You must agree to the terms and conditions." }),
+  agreeTerms: z.boolean().refine(val => val === true, {
+    message: "You must agree to the terms and conditions."
   }),
 });
 
