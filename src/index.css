@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +38,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +92,87 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-fashion-midnight text-fashion-champagne font-sans;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold;
+  }
+}
+
+@layer components {
+  .luxury-container {
+    @apply container mx-auto px-4 md:px-8;
+  }
+  
+  .gold-text {
+    @apply text-fashion-gold;
+  }
+  
+  .nav-link {
+    @apply relative px-2 py-1 text-fashion-champagne opacity-80 hover:opacity-100 transition-all duration-300 
+           after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 
+           after:bg-fashion-gold after:transition-all after:duration-300 hover:after:w-full;
+  }
+  
+  .section-title {
+    @apply font-serif text-3xl md:text-4xl lg:text-5xl mb-6 text-fashion-champagne relative inline-block;
+  }
+  
+  .section-title::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-1/2 h-[2px] bg-fashion-gold;
+  }
+  
+  .portfolio-item {
+    @apply relative overflow-hidden group cursor-pointer transition-all duration-500 bg-black;
+  }
+  
+  .portfolio-item img {
+    @apply transition-all duration-500 group-hover:scale-110 group-hover:opacity-80;
+  }
+  
+  .portfolio-overlay {
+    @apply absolute inset-0 bg-gradient-to-b from-transparent to-fashion-midnight opacity-0 
+           group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6;
+  }
+  
+  .timeline-item {
+    @apply relative pl-8 pb-10 border-l border-fashion-gold last:border-0;
+  }
+  
+  .timeline-dot {
+    @apply absolute left-0 w-4 h-4 rounded-full bg-fashion-gold transform -translate-x-1/2 mt-1.5;
+  }
+  
+  .spotlight {
+    @apply pointer-events-none fixed w-36 h-36 rounded-full bg-gradient-radial from-fashion-gold/20 to-transparent 
+           opacity-0 transition-opacity duration-200 -translate-x-1/2 -translate-y-1/2 z-50;
+  }
+  
+  .btn-luxury {
+    @apply px-6 py-3 border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/10 
+           transition-all duration-300 uppercase tracking-wider text-sm font-sans;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .gold-gradient {
+    background: linear-gradient(to right, #D4AF37, #FEF1A7, #D4AF37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-3d {
+    transform-style: preserve-3d;
   }
 }
