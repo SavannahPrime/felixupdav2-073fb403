@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -142,6 +143,24 @@ export default {
 						opacity: '0', 
 						transform: 'scale(1.5)' 
 					}
+				},
+				'pulse': {
+					'0%, 100%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '0.5',
+						transform: 'scale(1.1)'
+					}
+				},
+				'bounce': {
+					'0%, 100%': {
+						transform: 'translateY(0)'
+					},
+					'50%': {
+						transform: 'translateY(-25%)'
+					}
 				}
 			},
 			animation: {
@@ -150,7 +169,9 @@ export default {
 				'fade-in': 'fade-in 0.8s ease-out forwards',
 				'slide-in': 'slide-in 0.8s ease-out forwards',
 				'reveal': 'reveal 1.2s ease-out forwards',
-				'spotlight': 'spotlight 2s ease-out infinite'
+				'spotlight': 'spotlight 2s ease-out infinite',
+				'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'bounce': 'bounce 1s infinite'
 			}
 		}
 	},

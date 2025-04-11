@@ -157,8 +157,9 @@
   }
   
   .spotlight {
-    @apply pointer-events-none fixed w-36 h-36 rounded-full bg-gradient-radial from-fashion-gold/20 to-transparent 
+    @apply pointer-events-none fixed w-36 h-36 rounded-full from-fashion-gold/20 to-transparent 
            opacity-0 transition-opacity duration-200 -translate-x-1/2 -translate-y-1/2 z-50;
+    background: radial-gradient(circle, var(--tw-gradient-from), var(--tw-gradient-to));
   }
   
   .btn-luxury {

@@ -52,12 +52,20 @@ const Hero = () => {
 
   return (
     <div ref={containerRef} className="relative h-screen overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-fashion-midnight to-black"></div>
+      {/* Hero image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/lovable-uploads/9600aaa4-5bb4-4bdb-93ca-562173f75595.png" 
+          alt="Felix Oloo" 
+          className="w-full h-full object-cover object-center opacity-40"
+          style={{ transform: `scale(1.1) translateY(${scrollY * 0.1}px)` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-fashion-midnight/70 via-fashion-midnight/50 to-fashion-midnight"></div>
+      </div>
       
       {/* Hero content */}
       <div 
-        className="luxury-container relative flex flex-col justify-center items-center h-full"
+        className="luxury-container relative z-10 flex flex-col justify-center items-center h-full"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       >
         <div className="text-center max-w-4xl">
