@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import ProjectsList from '../components/ProjectsList';
 import Footer from '../components/Footer';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Projects = () => {
   const [isPageTransitioning, setIsPageTransitioning] = useState(true);
@@ -98,6 +100,99 @@ const Projects = () => {
           >
             <ProjectsList />
           </div>
+          
+          {/* Endeleza Youth Initiative Section */}
+          <section id="endeleza-initiative" className="mt-20 mb-16 relative z-10 bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-8">
+            <div className="flex flex-col items-center mb-8">
+              <img 
+                src="/lovable-uploads/9cc996e1-4d26-46da-b0a1-8dd9fef205b6.png" 
+                alt="Endeleza Youth Initiative Logo" 
+                className="w-48 md:w-56 mx-auto mb-6"
+              />
+              <h2 className="text-2xl md:text-3xl font-serif text-fashion-gold mb-2">Endeleza Youth Initiative</h2>
+              <p className="text-xl text-fashion-champagne/80 font-serif italic">"We Rise by Sharing"</p>
+            </div>
+            
+            <div className="mb-8">
+              <p className="text-fashion-champagne/90 mb-6 leading-relaxed">
+                Endeleza Youth Initiative is a youth-led, non-profit organization dedicated to empowering young people and transforming lives across Kenya. We believe in driving change through education, advocacy, mentorship, and sustainable development. Over the years, we have supported numerous schools across the country and continue to expand our reach to underserved communities. Our programs also extend support to single mothers, fathers, and vulnerable children, ensuring that no one is left behind in the journey toward empowerment and growth.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-serif text-fashion-gold mb-4">OUR MISSION</h3>
+                <p className="text-fashion-champagne/90 leading-relaxed">
+                  To empower young people through education, mentorship, and skill development while promoting sustainable community solutions in areas such as child rights advocacy, water and sanitation, and socio-economic growth.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-serif text-fashion-gold mb-4">OUR VISION</h3>
+                <p className="text-fashion-champagne/90 leading-relaxed">
+                  A transformed society where every young person is educated, empowered, and equipped to lead positive change in their communities and beyond.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-serif text-fashion-gold mb-4">OUR OBJECTIVES</h3>
+              <ul className="space-y-3">
+                {[
+                  "To provide educational support and resources to underprivileged children and youth.",
+                  "To advocate for the rights and well-being of children and marginalized groups.",
+                  "To promote access to clean water, sanitation, and hygiene (WASH) services.",
+                  "To offer mentorship and skill-building programs that prepare youth for leadership and entrepreneurship.",
+                  "To foster community-driven development through active youth participation."
+                ].map((objective, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-fashion-gold mr-3 mt-1">•</span>
+                    <span className="text-fashion-champagne/90">{objective}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <img 
+                src="/lovable-uploads/dd5de1ca-c0ec-42fb-b873-60644077c079.png" 
+                alt="Endeleza Initiative Students" 
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <img 
+                src="/lovable-uploads/4d25893c-e0e0-4cee-85f3-3790d4b76275.png" 
+                alt="Endeleza Initiative Students with Leader" 
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <img 
+                src="/lovable-uploads/75d2a611-491d-48fa-8f51-d4aac3707f31.png" 
+                alt="Endeleza Initiative Leadership Meeting" 
+                className="w-full h-40 object-cover rounded-lg"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-serif text-fashion-gold mb-4">OUR END GOAL</h3>
+                <p className="text-fashion-champagne/90 leading-relaxed">
+                  To nurture a generation of informed, inspired, and proactive young individuals who are agents of transformation in their communities building a more equitable, empowered, and sustainable future.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-serif text-fashion-gold mb-4">OUR THEME</h3>
+                <p className="text-fashion-champagne/90 leading-relaxed">
+                  "We Rise by Sharing"<br />
+                  We believe in the power of collaboration, compassion, and community. By uplifting others, we create a ripple effect of positive change that empowers all.
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <Link to="/volunteer" className="btn-luxury inline-flex items-center">
+                Join Endeleza Initiative
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </section>
           
           {/* Metallic accent line */}
           <div className="w-full max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-fashion-gold/50 to-transparent mt-20 relative">

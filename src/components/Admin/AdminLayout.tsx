@@ -121,6 +121,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, currentPath 
               theme={theme}
             />
             <NavItem 
+              icon={<Calendar size={20} />} 
+              label="Events" 
+              to="/admin/events" 
+              active={currentPath === '/admin/events'} 
+              theme={theme}
+            />
+            <NavItem 
               icon={<UserPlus size={20} />} 
               label="Volunteers" 
               to="/admin/volunteers" 

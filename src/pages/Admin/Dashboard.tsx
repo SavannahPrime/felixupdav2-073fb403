@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,7 +7,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import AdminLayout from '../../components/Admin/AdminLayout';
 import { supabase } from '@/integrations/supabase/client';
 
-// Types for our data
 interface PortfolioItem {
   id: string;
   title: string;
@@ -75,52 +73,43 @@ const AdminDashboard = () => {
       try {
         setLoading(true);
         
-        // Fetch portfolio items count
         const { count: portfolioCount } = await supabase
           .from('portfolio_items')
           .select('*', { count: 'exact', head: true });
           
-        // Fetch blog posts count
         const { count: blogCount } = await supabase
           .from('blog_posts')
           .select('*', { count: 'exact', head: true });
           
-        // Fetch projects count
         const { count: projectCount } = await supabase
           .from('projects')
           .select('*', { count: 'exact', head: true });
           
-        // Fetch volunteers count
         const { count: volunteerCount } = await supabase
           .from('volunteers')
           .select('*', { count: 'exact', head: true });
         
-        // Fetch unread messages count
         const { count: unreadMessagesCount } = await supabase
           .from('messages')
           .select('*', { count: 'exact', head: true })
           .eq('is_read', false);
           
-        // Fetch recent portfolio items
         const { data: recentPortfolioItems } = await supabase
           .from('portfolio_items')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(3);
           
-        // Fetch all projects (needed for volunteer data)
         const { data: projects } = await supabase
           .from('projects')
           .select('id, title');
           
-        // Fetch recent volunteers
         const { data: recentVolunteers } = await supabase
           .from('volunteers')
           .select('*')
           .order('created_at', { ascending: false })
           .limit(3);
           
-        // Combine volunteers with project titles
         const volunteersWithProjects = recentVolunteers?.map(volunteer => {
           const project = projects?.find(p => p.id === volunteer.project_id);
           return {
@@ -146,7 +135,6 @@ const AdminDashboard = () => {
       }
     };
     
-    // Check authentication before fetching data
     const authStatus = sessionStorage.getItem('isAuthenticated');
     if (authStatus !== 'true') {
       navigate('/admin/login');
@@ -188,11 +176,12 @@ const AdminDashboard = () => {
   return (
     <AdminLayout title="Admin Dashboard" currentPath={location.pathname}>
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-6 bg-black/30 backdrop-blur-md border border-fashion-gold/20">
+        <TabsList className="grid w-full grid-cols-7 bg-black/30 backdrop-blur-md border border-fashion-gold/20">
           <TabsTrigger value="overview" className="data-[state=active]:text-fashion-gold">Overview</TabsTrigger>
           <TabsTrigger value="content" className="data-[state=active]:text-fashion-gold">Content</TabsTrigger>
           <TabsTrigger value="blog" className="data-[state=active]:text-fashion-gold">Blog</TabsTrigger>
           <TabsTrigger value="projects" className="data-[state=active]:text-fashion-gold">Projects</TabsTrigger>
+          <TabsTrigger value="events" className="data-[state=active]:text-fashion-gold">Events</TabsTrigger>
           <TabsTrigger value="volunteers" className="data-[state=active]:text-fashion-gold">Volunteers</TabsTrigger>
           <TabsTrigger value="messages" className="data-[state=active]:text-fashion-gold">Messages</TabsTrigger>
         </TabsList>
@@ -372,6 +361,20 @@ const AdminDashboard = () => {
           </div>
         </TabsContent>
         
+        <TabsContent value="events" className="mt-6">
+          <div className="bg-black/20 backdrop-blur-md border border-fashion-gold/10 rounded-lg p-8 text-center">
+            <Calendar className="h-16 w-16 mx-auto text-fashion-champagne/30 mb-4" />
+            <h2 className="text-xl font-serif text-fashion-champagne mb-2">Events Management</h2>
+            <p className="text-fashion-champagne/70 mb-6 max-w-md mx-auto">Create and manage upcoming events, workshops, and fashion shows</p>
+            <button 
+              onClick={() => navigate('/admin/events')}
+              className="btn-luxury"
+            >
+              Go to Events Manager
+            </button>
+          </div>
+        </TabsContent>
+        
         <TabsContent value="volunteers" className="mt-6">
           <div className="bg-black/20 backdrop-blur-md border border-fashion-gold/10 rounded-lg p-8 text-center">
             <UserPlus className="h-16 w-16 mx-auto text-fashion-champagne/30 mb-4" />
@@ -411,7 +414,6 @@ const AdminDashboard = () => {
   );
 };
 
-// Helper components
 const StatCard = ({ title, value, change, icon, linkTo }: { 
   title: string, 
   value: string, 
