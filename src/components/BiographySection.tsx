@@ -14,32 +14,32 @@ const timelineData: TimelineItem[] = [
   {
     id: 1,
     year: '2023',
-    title: 'Paris Fashion Week',
-    description: 'Walked for Dior, Saint Laurent, and Balmain at Paris Fashion Week, establishing presence in European haute couture.'
+    title: 'Major Runway Shows',
+    description: 'Walked for top designers at Nairobi Fashion Week and East African Fashion Summit, establishing presence in regional haute couture.'
   },
   {
     id: 2,
     year: '2022',
-    title: 'Milan Campaign Season',
-    description: 'Featured in campaigns for Prada and Versace, showcasing versatility across different brand aesthetics.'
+    title: 'Campaign Season',
+    description: 'Featured in campaigns for leading African fashion brands, showcasing versatility across different aesthetics and styles.'
   },
   {
     id: 3,
     year: '2021',
-    title: 'New York Debut',
-    description: 'First major runway show at New York Fashion Week, opening for emerging designers and established houses.'
+    title: 'Pageant Judge',
+    description: 'Served as judge for Mr. Nairobi County and other prestigious pageants, bringing expertise to contestant evaluation.'
   },
   {
     id: 4,
     year: '2020',
-    title: 'Agency Signing',
-    description: 'Signed with IMG Models worldwide, beginning professional modeling career after being scouted.'
+    title: 'Endeleza Initiative',
+    description: 'Founded Endeleza Youth Initiative to empower young Kenyans through education, mentorship, and opportunity creation.'
   },
   {
     id: 5,
     year: '2019',
-    title: 'First Editorial',
-    description: 'Featured in GQ editorial spread, highlighting natural photogenic qualities and stage presence.'
+    title: 'First Major Event',
+    description: 'Successfully organized Mr. & Miss Heritage, highlighting natural leadership qualities and event management skills.'
   }
 ];
 
@@ -84,16 +84,16 @@ const BiographySection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Bio text */}
           <div className="lg:col-span-1">
-            <h3 className="text-2xl font-serif text-fashion-gold mb-6">About Felix</h3>
+            <h3 className="text-2xl font-serif text-fashion-gold mb-6">Multi-talented Fashion Icon</h3>
             <p className="text-fashion-champagne/80 mb-6">
               Felix Oloo is a Kenyan-born international model who has quickly risen to prominence in the fashion industry.
               Known for his striking features and commanding runway presence, Felix has become a favorite for designers
               seeking to make a bold statement with their collections.
             </p>
             <p className="text-fashion-champagne/80 mb-8">
-              With a background in performing arts, Felix brings a theatrical quality to his modeling work that sets him apart
-              from his peers. His ability to embody diverse characters and aesthetics has made him versatile across editorial,
-              campaign, and runway projects.
+              From modeling and judging to organizing prestigious events, Felix has carved out a reputable name in Kenya's fashion 
+              and pageant scene, blending elegance with leadership. His ability to embody diverse characters and aesthetics has 
+              made him versatile across editorial, campaign, and runway projects.
             </p>
             
             {/* Stats */}

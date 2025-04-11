@@ -78,7 +78,7 @@ const Blog = () => {
       
       <div className={`pt-32 pb-20 transition-opacity duration-700 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="luxury-container">
-          <h1 className="section-title mb-8 relative">
+          <h1 className="section-title mb-6">
             Blog
             <span className="absolute -top-3 -right-3 text-xs text-fashion-gold border border-fashion-gold/30 px-2 py-1 rotate-6">
               FASHION INSIGHTS
@@ -86,8 +86,9 @@ const Blog = () => {
           </h1>
           
           <div className="mb-12 max-w-3xl mx-auto">
-            <p className="text-fashion-champagne/70 text-center italic">
-              Explore fashion industry insights, runway trends, and model lifestyle perspectives
+            <p className="text-fashion-champagne/70 text-center">
+              Through his voice and experience, Felix shares thoughts on fashion, youth empowerment, 
+              and building a future through platforms like Endeleza Youth Initiative.
             </p>
             
             {/* Fabric-inspired divider */}

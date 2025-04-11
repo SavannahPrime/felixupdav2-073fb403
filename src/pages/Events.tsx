@@ -19,35 +19,35 @@ const Events = () => {
   const [events, setEvents] = useState<Event[]>([
     {
       id: "1",
-      title: "Paris Fashion Week",
-      date: "March 15-22, 2025",
-      location: "Paris, France",
-      type: "runway",
-      description: "Walking for Louis Vuitton, Dior, and Balenciaga during the prestigious Paris Fashion Week."
+      title: "Mr. Nairobi County Pageant",
+      date: "June 15-22, 2025",
+      location: "Nairobi, Kenya",
+      type: "judging",
+      description: "Serving as lead judge for Mr. Nairobi County pageant, bringing industry expertise to contestant evaluation."
     },
     {
       id: "2",
-      title: "Vogue Magazine Editorial",
+      title: "Fashion for Change Gala",
       date: "April 10, 2025",
-      location: "New York, USA",
-      type: "editorial",
-      description: "Featured editorial spread in Vogue's Spring Collection issue."
+      location: "Mombasa, Kenya",
+      type: "organization",
+      description: "Leading the organization of the annual Fashion for Change charity gala supporting education initiatives."
     },
     {
       id: "3",
-      title: "Milan Fashion Week",
+      title: "Mr. & Miss Heritage",
       date: "September 5-12, 2025",
-      location: "Milan, Italy",
-      type: "runway",
-      description: "Opening for Prada and closing for Gucci at Milan Fashion Week."
+      location: "Kisumu, Kenya",
+      type: "organization",
+      description: "Organizing and producing the prestigious Mr. & Miss Heritage pageant celebrating Kenyan culture."
     },
     {
       id: "4",
-      title: "Charity Gala",
+      title: "Youth Mentorship Workshop",
       date: "May 28, 2025",
-      location: "London, UK",
+      location: "Nairobi, Kenya",
       type: "appearance",
-      description: "Special guest appearance at the annual Fashion for Education charity gala."
+      description: "Special guest appearance at youth mentorship workshop for aspiring models and fashion professionals."
     }
   ]);
 
@@ -63,13 +63,14 @@ const Events = () => {
       <Navbar />
       <div className="pt-32 pb-20">
         <div className="luxury-container">
-          <h1 className="section-title mb-16">Events</h1>
+          <h1 className="section-title mb-6">Events</h1>
+          <h2 className="text-xl text-fashion-champagne/80 mb-16 max-w-3xl">Elite Event Organizer & Judge</h2>
           
           <Tabs defaultValue="all" className="w-full">
             <TabsList className="grid w-full grid-cols-4 bg-fashion-midnight/40 backdrop-blur-md border border-fashion-gold/20">
               <TabsTrigger value="all" className="data-[state=active]:text-fashion-gold">All Events</TabsTrigger>
-              <TabsTrigger value="runway" className="data-[state=active]:text-fashion-gold">Runway</TabsTrigger>
-              <TabsTrigger value="editorial" className="data-[state=active]:text-fashion-gold">Editorial</TabsTrigger>
+              <TabsTrigger value="judging" className="data-[state=active]:text-fashion-gold">Judging</TabsTrigger>
+              <TabsTrigger value="organization" className="data-[state=active]:text-fashion-gold">Organization</TabsTrigger>
               <TabsTrigger value="appearance" className="data-[state=active]:text-fashion-gold">Appearances</TabsTrigger>
             </TabsList>
             
@@ -81,17 +82,17 @@ const Events = () => {
               </div>
             </TabsContent>
             
-            <TabsContent value="runway" className="mt-8">
+            <TabsContent value="judging" className="mt-8">
               <div className="space-y-8">
-                {events.filter(e => e.type === 'runway').map(event => (
+                {events.filter(e => e.type === 'judging').map(event => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
             </TabsContent>
             
-            <TabsContent value="editorial" className="mt-8">
+            <TabsContent value="organization" className="mt-8">
               <div className="space-y-8">
-                {events.filter(e => e.type === 'editorial').map(event => (
+                {events.filter(e => e.type === 'organization').map(event => (
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
@@ -120,8 +121,8 @@ const EventCard = ({ event }: { event: Event }) => {
           <div className="flex items-center mb-4">
             <span className={`
               px-3 py-1 text-xs uppercase tracking-wider rounded mr-4
-              ${event.type === 'runway' ? 'bg-purple-900/30 text-purple-300 border border-purple-600/30' : ''}
-              ${event.type === 'editorial' ? 'bg-blue-900/30 text-blue-300 border border-blue-600/30' : ''}
+              ${event.type === 'judging' ? 'bg-purple-900/30 text-purple-300 border border-purple-600/30' : ''}
+              ${event.type === 'organization' ? 'bg-blue-900/30 text-blue-300 border border-blue-600/30' : ''}
               ${event.type === 'appearance' ? 'bg-green-900/30 text-green-300 border border-green-600/30' : ''}
             `}>
               {event.type}

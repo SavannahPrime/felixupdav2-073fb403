@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -164,12 +165,6 @@
     @apply absolute left-0 w-4 h-4 rounded-full bg-fashion-gold transform -translate-x-1/2 mt-1.5;
   }
   
-  .spotlight {
-    @apply pointer-events-none fixed w-36 h-36 rounded-full opacity-0 
-           transition-opacity duration-200 -translate-x-1/2 -translate-y-1/2 z-50;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent);
-  }
-  
   .btn-luxury {
     @apply px-6 py-3 border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/10 
            transition-all duration-300 uppercase tracking-wider text-sm font-sans;
@@ -198,4 +193,19 @@
   .transform-3d {
     transform-style: preserve-3d;
   }
+}
+
+/* Define the spotlight style directly without using Tailwind @apply */
+.spotlight {
+  pointer-events: none;
+  position: fixed;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 9999px;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 200ms;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent);
 }

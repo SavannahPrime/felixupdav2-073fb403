@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import SocialMediaDock from './SocialMediaDock';
+import TooltipWrapper from './ui/TooltipWrapper';
 
 // Sound effect function
 const playSwishSound = () => {
@@ -122,65 +123,67 @@ const Hero = () => {
             High Fashion Model & Runway Specialist
           </p>
           
-          {/* Agency affiliations with hover effects */}
-          <div className="flex justify-center space-x-6 opacity-0 animate-fade-in" style={{ animationDelay: '1s' }}>
-            <HoverCard openDelay={200} closeDelay={100}>
-              <HoverCardTrigger asChild>
-                <span 
-                  className={`px-4 py-1 border ${isImgHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                              transition-all duration-300 cursor-pointer`}
-                  onMouseEnter={() => setIsImgHovered(true)}
-                  onMouseLeave={() => setIsImgHovered(false)}
-                >
-                  IMG
-                </span>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                <div className="flex flex-col space-y-2">
-                  <h4 className="text-fashion-gold text-sm">IMG Models</h4>
-                  <p className="text-xs text-fashion-champagne/70">World's leading modeling agency representing fashion's biggest talents.</p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-            
-            <HoverCard openDelay={200} closeDelay={100}>
-              <HoverCardTrigger asChild>
-                <span 
-                  className={`px-4 py-1 border ${isEliteHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                              transition-all duration-300 cursor-pointer`}
-                  onMouseEnter={() => setIsEliteHovered(true)}
-                  onMouseLeave={() => setIsEliteHovered(false)}
-                >
-                  ELITE
-                </span>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                <div className="flex flex-col space-y-2">
-                  <h4 className="text-fashion-gold text-sm">Elite Model Management</h4>
-                  <p className="text-xs text-fashion-champagne/70">Prestigious agency with a heritage of discovering supermodels since 1972.</p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-            
-            <HoverCard openDelay={200} closeDelay={100}>
-              <HoverCardTrigger asChild>
-                <span 
-                  className={`px-4 py-1 border ${isFordHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                              transition-all duration-300 cursor-pointer`}
-                  onMouseEnter={() => setIsFordHovered(true)}
-                  onMouseLeave={() => setIsFordHovered(false)}
-                >
-                  FORD
-                </span>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                <div className="flex flex-col space-y-2">
-                  <h4 className="text-fashion-gold text-sm">Ford Models</h4>
-                  <p className="text-xs text-fashion-champagne/70">Iconic agency with a legacy of representing top models for over 75 years.</p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
+          {/* Agency affiliations with hover effects - updated to match the image */}
+          <TooltipWrapper>
+            <div className="flex justify-center space-x-6 opacity-0 animate-fade-in" style={{ animationDelay: '1s' }}>
+              <HoverCard openDelay={200} closeDelay={100}>
+                <HoverCardTrigger asChild>
+                  <span 
+                    className={`px-4 py-1 border ${isImgHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
+                                transition-all duration-300 cursor-pointer`}
+                    onMouseEnter={() => setIsImgHovered(true)}
+                    onMouseLeave={() => setIsImgHovered(false)}
+                  >
+                    IMG
+                  </span>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
+                  <div className="flex flex-col space-y-2">
+                    <h4 className="text-fashion-gold text-sm">IMG Models</h4>
+                    <p className="text-xs text-fashion-champagne/70">World's leading modeling agency representing fashion's biggest talents.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              
+              <HoverCard openDelay={200} closeDelay={100}>
+                <HoverCardTrigger asChild>
+                  <span 
+                    className={`px-4 py-1 border ${isEliteHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
+                                transition-all duration-300 cursor-pointer`}
+                    onMouseEnter={() => setIsEliteHovered(true)}
+                    onMouseLeave={() => setIsEliteHovered(false)}
+                  >
+                    ELITE
+                  </span>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
+                  <div className="flex flex-col space-y-2">
+                    <h4 className="text-fashion-gold text-sm">Elite Model Management</h4>
+                    <p className="text-xs text-fashion-champagne/70">Prestigious agency with a heritage of discovering supermodels since 1972.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              
+              <HoverCard openDelay={200} closeDelay={100}>
+                <HoverCardTrigger asChild>
+                  <span 
+                    className={`px-4 py-1 border ${isFordHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
+                                transition-all duration-300 cursor-pointer`}
+                    onMouseEnter={() => setIsFordHovered(true)}
+                    onMouseLeave={() => setIsFordHovered(false)}
+                  >
+                    FORD
+                  </span>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
+                  <div className="flex flex-col space-y-2">
+                    <h4 className="text-fashion-gold text-sm">Ford Models</h4>
+                    <p className="text-xs text-fashion-champagne/70">Iconic agency with a legacy of representing top models for over 75 years.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
+          </TooltipWrapper>
         </div>
       </div>
       
@@ -195,7 +198,21 @@ const Hero = () => {
       </div>
       
       {/* Cursor spotlight effect */}
-      <div ref={spotlightRef} className="spotlight"></div>
+      <div 
+        ref={spotlightRef} 
+        className="spotlight"
+        style={{
+          pointerEvents: 'none',
+          position: 'fixed',
+          width: '9rem', 
+          height: '9rem', 
+          borderRadius: '9999px',
+          opacity: 0,
+          transform: 'translate(-50%, -50%)',
+          zIndex: 50,
+          background: 'radial-gradient(circle, rgba(212,175,55,0.2), transparent)'
+        }}
+      ></div>
       
       {/* Measuring tape progress indicator */}
       <div className="absolute bottom-8 left-8 right-8 h-1 bg-fashion-champagne/10">

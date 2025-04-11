@@ -99,15 +99,15 @@ const Volunteer = () => {
             <h1 className="section-title mb-6">
               Volunteer Registration
               <div className="absolute -top-3 -right-3 text-xs text-fashion-gold border border-fashion-gold/30 px-2 py-1 rotate-6">
-                JOIN THE TEAM
+                ENDELEZA YOUTH INITIATIVE
               </div>
             </h1>
           </div>
           
           <p className="text-fashion-champagne/80 text-center max-w-2xl mx-auto mb-16">
-            Join our community of passionate volunteers and help make a difference in the fashion industry. 
-            Whether you're interested in event coordination, mentoring, or creative direction, 
-            there's a place for you in our programs.
+            Felix leads a mission to empower Kenyan youth with education and mentorship, offering opportunities 
+            and hope for a better tomorrow. Join our community of passionate volunteers and help make a difference 
+            in the lives of young Kenyans through education, arts, and fashion.
           </p>
           
           {/* Fashion-inspired form wrapper */}

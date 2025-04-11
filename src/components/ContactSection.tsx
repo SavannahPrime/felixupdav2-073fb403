@@ -55,13 +55,18 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-20 relative">
       <div className="luxury-container">
-        <h2 className="section-title mb-16">Contact</h2>
+        <h2 className="section-title mb-6">Contact</h2>
+        <h3 className="text-xl text-fashion-champagne/80 mb-16 max-w-3xl">
+          Reach Out for Collaborations
+        </h3>
         
         <div className="flex flex-col md:flex-row gap-12">
           <div className="w-full md:w-1/2">
             <h3 className="text-2xl font-serif text-fashion-gold mb-4">Get in Touch</h3>
             <p className="text-fashion-champagne/80 mb-8">
-              I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.
+              For bookings, partnerships, or mentorship inquiries, Felix remains open to working with brands, 
+              creatives, and changemakers. Whether you're interested in runway collaborations, event judging, 
+              or youth initiatives, feel free to reach out.
             </p>
             
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -143,22 +148,22 @@ const ContactSection = () => {
                   
                   <div>
                     <p className="text-fashion-gold font-medium">Phone</p>
-                    <a href="tel:+12345678901" className="text-fashion-champagne hover:text-fashion-gold transition-colors">+1 (234) 567-8901</a>
+                    <a href="tel:+254123456789" className="text-fashion-champagne hover:text-fashion-gold transition-colors">+254 123 456 789</a>
                   </div>
                   
                   <div>
                     <p className="text-fashion-gold font-medium">Based in</p>
-                    <p className="text-fashion-champagne">New York, United States</p>
+                    <p className="text-fashion-champagne">Nairobi, Kenya</p>
                   </div>
                 </div>
               </div>
               
               <div className="mt-12 md:mt-0">
-                <h3 className="text-xl font-serif text-fashion-gold mb-4">Agency Representation</h3>
+                <h3 className="text-xl font-serif text-fashion-gold mb-4">Endeleza Youth Initiative</h3>
                 <div>
-                  <p className="text-fashion-gold font-medium">Elite Models, New York</p>
-                  <p className="text-fashion-champagne">123 Fashion Avenue, NY 10001</p>
-                  <a href="tel:+12123456789" className="text-fashion-champagne hover:text-fashion-gold transition-colors block mt-1">+1 (212) 345-6789</a>
+                  <p className="text-fashion-gold font-medium">For Youth Initiative Inquiries</p>
+                  <p className="text-fashion-champagne">Endeleza House, Nairobi</p>
+                  <a href="mailto:endeleza@felix-oloo.com" className="text-fashion-champagne hover:text-fashion-gold transition-colors block mt-1">endeleza@felix-oloo.com</a>
                 </div>
               </div>
             </div>

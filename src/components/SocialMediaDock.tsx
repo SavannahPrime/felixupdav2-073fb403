@@ -1,5 +1,5 @@
 
-import { Instagram, Linkedin, MessageCircle, CircleUser } from 'lucide-react';
+import { Instagram, Linkedin, MessageCircle, CircleUser, Facebook, Twitter } from 'lucide-react';
 import { useState } from 'react';
 
 interface SocialMediaDockProps {
@@ -18,11 +18,18 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
       label: 'Follow on Instagram'
     },
     { 
-      platform: 'tiktok', 
-      icon: CircleUser, // Using CircleUser icon as a replacement for TikTok
-      url: 'https://tiktok.com/@felixoloo',
-      color: 'bg-black',
-      label: 'Follow on TikTok'
+      platform: 'facebook', 
+      icon: Facebook, 
+      url: 'https://facebook.com/felixoloo',
+      color: 'bg-blue-600',
+      label: 'Follow on Facebook'
+    },
+    { 
+      platform: 'twitter', 
+      icon: Twitter, 
+      url: 'https://twitter.com/felixoloo',
+      color: 'bg-blue-400',
+      label: 'Follow on Twitter'
     },
     { 
       platform: 'linkedin', 
@@ -86,7 +93,10 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
             {hoveredIcon === 'instagram' && (
               <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-fashion-gold/50"></span>
             )}
-            {hoveredIcon === 'tiktok' && (
+            {hoveredIcon === 'facebook' && (
+              <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-blue-400/50"></span>
+            )}
+            {hoveredIcon === 'twitter' && (
               <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 h-1">
                 <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '0%' }}></div>
                 <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '25%', animationDelay: '0.1s' }}></div>
