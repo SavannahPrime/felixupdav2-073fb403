@@ -7,6 +7,7 @@ type Project = {
   id: string;
   title: string;
   status: string;
+  accepts_volunteers: boolean | null;
 };
 
 const VolunteerForm = () => {
@@ -15,9 +16,15 @@ const VolunteerForm = () => {
   const [phone, setPhone] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
   const [availability, setAvailability] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [interests, setInterests] = useState<string[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // Predefined options
+  const skillOptions = ['Design', 'Photography', 'Event Planning', 'Teaching', 'Marketing', 'Social Media', 'Writing', 'Administration'];
+  const interestOptions = ['Fashion', 'Youth Mentorship', 'Community Work', 'Education', 'Arts & Culture', 'Media'];
 
   // Fetch available projects
   useEffect(() => {
@@ -26,8 +33,9 @@ const VolunteerForm = () => {
         setLoading(true);
         const { data, error } = await supabase
           .from('projects')
-          .select('id, title, status')
+          .select('id, title, status, accepts_volunteers')
           .or('status.eq.ongoing,status.eq.upcoming')
+          .eq('accepts_volunteers', true)
           .order('created_at', { ascending: false });
         
         if (error) throw error;
@@ -46,6 +54,22 @@ const VolunteerForm = () => {
 
   const handleAvailabilityChange = (option: string) => {
     setAvailability(prev => 
+      prev.includes(option)
+        ? prev.filter(item => item !== option)
+        : [...prev, option]
+    );
+  };
+
+  const handleSkillChange = (option: string) => {
+    setSkills(prev => 
+      prev.includes(option)
+        ? prev.filter(item => item !== option)
+        : [...prev, option]
+    );
+  };
+
+  const handleInterestChange = (option: string) => {
+    setInterests(prev => 
       prev.includes(option)
         ? prev.filter(item => item !== option)
         : [...prev, option]
@@ -90,7 +114,10 @@ const VolunteerForm = () => {
           email, 
           phone: phone || null, 
           project_id: selectedProject,
-          availability
+          availability,
+          skills: skills.length > 0 ? skills : null,
+          interests: interests.length > 0 ? interests : null,
+          status: 'pending'
         }
       ]);
       
@@ -105,6 +132,8 @@ const VolunteerForm = () => {
       setPhone('');
       setSelectedProject('');
       setAvailability([]);
+      setSkills([]);
+      setInterests([]);
     } catch (error) {
       console.error('Error submitting volunteer form:', error);
       toast.error('There was an error submitting your application. Please try again later.');
@@ -202,6 +231,54 @@ const VolunteerForm = () => {
                   />
                   <span className={`cursor-pointer px-3 py-1 rounded-full text-sm ${
                     availability.includes(option)
+                      ? 'bg-fashion-gold/20 text-fashion-gold border border-fashion-gold/30'
+                      : 'bg-black/40 text-fashion-champagne/80 border border-fashion-gold/10 hover:border-fashion-gold/30'
+                  }`}>
+                    {option}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <label className="block text-sm text-fashion-champagne/80">Skills (optional)</label>
+            
+            <div className="flex flex-wrap gap-2">
+              {skillOptions.map(option => (
+                <label key={option} className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={skills.includes(option)}
+                    onChange={() => handleSkillChange(option)}
+                    className="sr-only"
+                  />
+                  <span className={`cursor-pointer px-3 py-1 rounded-full text-sm ${
+                    skills.includes(option)
+                      ? 'bg-fashion-gold/20 text-fashion-gold border border-fashion-gold/30'
+                      : 'bg-black/40 text-fashion-champagne/80 border border-fashion-gold/10 hover:border-fashion-gold/30'
+                  }`}>
+                    {option}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <label className="block text-sm text-fashion-champagne/80">Interests (optional)</label>
+            
+            <div className="flex flex-wrap gap-2">
+              {interestOptions.map(option => (
+                <label key={option} className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={interests.includes(option)}
+                    onChange={() => handleInterestChange(option)}
+                    className="sr-only"
+                  />
+                  <span className={`cursor-pointer px-3 py-1 rounded-full text-sm ${
+                    interests.includes(option)
                       ? 'bg-fashion-gold/20 text-fashion-gold border border-fashion-gold/30'
                       : 'bg-black/40 text-fashion-champagne/80 border border-fashion-gold/10 hover:border-fashion-gold/30'
                   }`}>

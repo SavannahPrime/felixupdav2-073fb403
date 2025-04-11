@@ -104,33 +104,42 @@ export type Database = {
       }
       projects: {
         Row: {
+          accepts_volunteers: boolean | null
           created_at: string | null
           description: string
           duration: string | null
           id: string
           location: string | null
+          media_type: string | null
+          media_url: string | null
           status: string
           title: string
           updated_at: string | null
           volunteers_count: number | null
         }
         Insert: {
+          accepts_volunteers?: boolean | null
           created_at?: string | null
           description: string
           duration?: string | null
           id?: string
           location?: string | null
+          media_type?: string | null
+          media_url?: string | null
           status?: string
           title: string
           updated_at?: string | null
           volunteers_count?: number | null
         }
         Update: {
+          accepts_volunteers?: boolean | null
           created_at?: string | null
           description?: string
           duration?: string | null
           id?: string
           location?: string | null
+          media_type?: string | null
+          media_url?: string | null
           status?: string
           title?: string
           updated_at?: string | null
@@ -144,27 +153,36 @@ export type Database = {
           created_at: string | null
           email: string
           id: string
+          interests: string[] | null
           name: string
           phone: string | null
           project_id: string | null
+          skills: string[] | null
+          status: string | null
         }
         Insert: {
           availability?: string[] | null
           created_at?: string | null
           email: string
           id?: string
+          interests?: string[] | null
           name: string
           phone?: string | null
           project_id?: string | null
+          skills?: string[] | null
+          status?: string | null
         }
         Update: {
           availability?: string[] | null
           created_at?: string | null
           email?: string
           id?: string
+          interests?: string[] | null
           name?: string
           phone?: string | null
           project_id?: string | null
+          skills?: string[] | null
+          status?: string | null
         }
         Relationships: [
           {

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CalendarCheck, Users, Globe, ArrowUpRight } from 'lucide-react';
+import { CalendarCheck, Users, Globe, ArrowUpRight, Video, Image } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -15,6 +15,9 @@ interface Project {
   location: string | null;
   volunteers_count: number;
   created_at: string;
+  media_url: string | null;
+  media_type: string | null;
+  accepts_volunteers: boolean | null;
 }
 
 const ProjectsList = () => {
@@ -116,18 +119,39 @@ const ProjectsList = () => {
 
 const ProjectCard = ({ project }: { project: Project }) => {
   // Default image if none is provided
-  const imageUrl = project.image_url || "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png";
+  const mediaUrl = project.media_url || project.image_url || "/lovable-uploads/ace1ff45-5ee5-4476-b9bc-44bf0a639a1c.png";
+  const isVideo = project.media_type === 'video';
   
   return (
     <div className={`bg-black/30 backdrop-blur-md border border-fashion-gold/10 rounded-lg overflow-hidden`}>
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3">
-          <div className="h-full">
-            <img 
-              src={imageUrl} 
-              alt={project.title} 
-              className="w-full h-full object-cover"
-            />
+          <div className="h-full relative">
+            {isVideo ? (
+              <div className="h-full">
+                <video 
+                  src={mediaUrl} 
+                  className="w-full h-full object-cover"
+                  controls
+                />
+                <div className="absolute top-2 left-2 bg-black/60 p-1 rounded-md">
+                  <Video size={16} className="text-fashion-gold" />
+                </div>
+              </div>
+            ) : (
+              <div className="h-full relative">
+                <img 
+                  src={mediaUrl} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover"
+                />
+                {project.media_type === 'image' && (
+                  <div className="absolute top-2 left-2 bg-black/60 p-1 rounded-md">
+                    <Image size={16} className="text-fashion-gold" />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         
@@ -172,13 +196,15 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
           
           <div className="flex justify-between items-center">
-            {project.status === 'upcoming' || project.status === 'ongoing' ? (
+            {project.accepts_volunteers && (project.status === 'upcoming' || project.status === 'ongoing') ? (
               <a href="/volunteer" className="btn-luxury py-2 px-4 inline-flex items-center">
                 <Users size={16} className="mr-2" />
                 Volunteer for this project
               </a>
-            ) : (
+            ) : project.status === 'completed' ? (
               <span className="text-fashion-champagne/60 text-sm">This project has been completed</span>
+            ) : (
+              <span className="text-fashion-champagne/60 text-sm">This project is not accepting volunteers</span>
             )}
             
             <a href="#" className="flex items-center text-fashion-gold hover:text-fashion-champagne transition-colors text-sm">

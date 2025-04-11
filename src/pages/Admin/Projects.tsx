@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FolderPlus, Calendar, Users, Globe, Plus, Edit, Trash2, Check, X } from 'lucide-react';
+import { FolderPlus, Calendar, Users, Globe, Plus, Edit, Trash2, Check, X, Upload, Video, Image } from 'lucide-react';
 import { toast } from 'sonner';
 import AdminLayout from '../../components/Admin/AdminLayout';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +10,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface Project {
   id: string;
@@ -20,6 +22,9 @@ interface Project {
   location: string | null;
   volunteers_count: number;
   created_at: string;
+  media_url: string | null;
+  media_type: string | null;
+  accepts_volunteers: boolean | null;
 }
 
 const AdminProjects = () => {
@@ -32,7 +37,12 @@ const AdminProjects = () => {
   const [projectStatus, setProjectStatus] = useState('planning');
   const [projectLocation, setProjectLocation] = useState('');
   const [volunteersCount, setVolunteersCount] = useState<number>(0);
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [mediaType, setMediaType] = useState<string | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [acceptsVolunteers, setAcceptsVolunteers] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState("list");
 
@@ -68,7 +78,67 @@ const AdminProjects = () => {
     setProjectStatus('planning');
     setProjectLocation('');
     setVolunteersCount(0);
+    setMediaFile(null);
+    setMediaType(null);
+    setMediaPreview(null);
+    setAcceptsVolunteers(false);
     setEditingProject(null);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    const fileType = file.type.split('/')[0];
+    if (fileType !== 'image' && fileType !== 'video') {
+      toast.error('Only image or video files are allowed');
+      return;
+    }
+
+    setMediaFile(file);
+    setMediaType(fileType);
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setMediaPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const uploadMedia = async (): Promise<string | null> => {
+    if (!mediaFile) return null;
+    
+    try {
+      const fileExt = mediaFile.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const filePath = `projects/${fileName}`;
+      
+      // Upload file to Supabase Storage
+      const { error: uploadError, data } = await supabase.storage
+        .from('media')
+        .upload(filePath, mediaFile, {
+          cacheControl: '3600',
+          upsert: false,
+          onUploadProgress: (progress) => {
+            setUploadProgress((progress.loaded / progress.total) * 100);
+          }
+        });
+      
+      if (uploadError) throw uploadError;
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('media')
+        .getPublicUrl(filePath);
+      
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      toast.error('Failed to upload media');
+      return null;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,6 +152,14 @@ const AdminProjects = () => {
     try {
       setSubmitting(true);
       
+      // Upload media if selected
+      let mediaUrl = null;
+      if (mediaFile) {
+        mediaUrl = await uploadMedia();
+      } else if (editingProject?.media_url) {
+        mediaUrl = editingProject.media_url;
+      }
+      
       if (editingProject) {
         const { error } = await supabase
           .from('projects')
@@ -91,7 +169,10 @@ const AdminProjects = () => {
             duration,
             status: projectStatus,
             location: projectLocation,
-            volunteers_count: volunteersCount
+            volunteers_count: volunteersCount,
+            media_url: mediaUrl,
+            media_type: mediaFile ? mediaType : editingProject.media_type,
+            accepts_volunteers: acceptsVolunteers
           })
           .eq('id', editingProject.id);
           
@@ -107,7 +188,10 @@ const AdminProjects = () => {
               duration,
               status: projectStatus,
               location: projectLocation,
-              volunteers_count: volunteersCount
+              volunteers_count: volunteersCount,
+              media_url: mediaUrl,
+              media_type: mediaType,
+              accepts_volunteers: acceptsVolunteers
             }
           ]);
           
@@ -123,6 +207,7 @@ const AdminProjects = () => {
       toast.error('Failed to save project');
     } finally {
       setSubmitting(false);
+      setUploadProgress(0);
     }
   };
 
@@ -134,6 +219,9 @@ const AdminProjects = () => {
     setProjectStatus(project.status);
     setProjectLocation(project.location || '');
     setVolunteersCount(project.volunteers_count);
+    setMediaType(project.media_type);
+    setMediaPreview(project.media_url);
+    setAcceptsVolunteers(project.accepts_volunteers || false);
     setActiveTab("create");
   };
 
@@ -143,12 +231,33 @@ const AdminProjects = () => {
     }
     
     try {
+      // First get the project to check if it has media
+      const { data: project } = await supabase
+        .from('projects')
+        .select('media_url')
+        .eq('id', id)
+        .single();
+      
+      // Delete the project
       const { error } = await supabase
         .from('projects')
         .delete()
         .eq('id', id);
         
       if (error) throw error;
+
+      // If the project had media, delete it from storage
+      if (project?.media_url) {
+        // Extract file path from the URL
+        const url = new URL(project.media_url);
+        const filePath = url.pathname.split('/').slice(-2).join('/');
+        
+        if (filePath) {
+          await supabase.storage
+            .from('media')
+            .remove([filePath]);
+        }
+      }
       
       toast.success('Project deleted successfully');
       fetchProjects();
@@ -164,6 +273,23 @@ const AdminProjects = () => {
 
   const navigateToCreateTab = () => {
     setActiveTab("create");
+  };
+
+  const renderMediaPreview = (url: string | null, type: string | null) => {
+    if (!url) return null;
+    
+    if (type === 'image') {
+      return <img src={url} alt="Project media" className="w-full h-40 object-cover rounded" />;
+    } else if (type === 'video') {
+      return (
+        <video className="w-full h-40 object-cover rounded" controls>
+          <source src={url} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      );
+    }
+    
+    return null;
   };
 
   return (
@@ -207,6 +333,7 @@ const AdminProjects = () => {
                 <TableHeader>
                   <TableRow className="border-fashion-gold/20">
                     <TableHead className="text-fashion-champagne/80">Project</TableHead>
+                    <TableHead className="text-fashion-champagne/80">Media</TableHead>
                     <TableHead className="text-fashion-champagne/80">Duration</TableHead>
                     <TableHead className="text-fashion-champagne/80">Status</TableHead>
                     <TableHead className="text-fashion-champagne/80">Location</TableHead>
@@ -217,7 +344,33 @@ const AdminProjects = () => {
                 <TableBody>
                   {projects.map(project => (
                     <TableRow key={project.id} className="border-fashion-gold/10">
-                      <TableCell className="font-medium text-fashion-champagne">{project.title}</TableCell>
+                      <TableCell className="font-medium text-fashion-champagne">
+                        {project.title}
+                        {project.accepts_volunteers && (
+                          <div className="mt-1 text-xs text-green-400">
+                            <Users size={12} className="inline mr-1" />
+                            Accepting volunteers
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {project.media_url ? (
+                          <div className="w-16 h-16 relative">
+                            {project.media_type === 'image' ? (
+                              <Image size={16} className="absolute top-1 left-1 text-fashion-gold" />
+                            ) : project.media_type === 'video' ? (
+                              <Video size={16} className="absolute top-1 left-1 text-fashion-gold" />
+                            ) : null}
+                            <img 
+                              src={project.media_type === 'image' ? project.media_url : '/lovable-uploads/8e031a32-a817-4e19-b4fa-43bd23721f2e.png'}
+                              alt={project.title}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-xs text-fashion-champagne/40">None</span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-fashion-champagne/80">{project.duration || '—'}</TableCell>
                       <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${
@@ -360,6 +513,77 @@ const AdminProjects = () => {
                       className="bg-black/40 border-fashion-gold/30 text-fashion-champagne"
                     />
                   </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-fashion-champagne/80">
+                    Project Media (Image or Video)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <label 
+                        htmlFor="media-upload" 
+                        className="flex items-center justify-center w-full h-32 px-4 transition bg-black/40 border-2 border-fashion-gold/20 border-dashed rounded-md appearance-none cursor-pointer hover:border-fashion-gold/40"
+                      >
+                        <span className="flex flex-col items-center space-y-2">
+                          <Upload className="w-6 h-6 text-fashion-gold/70" />
+                          <span className="text-sm text-fashion-champagne/60">
+                            Click to upload image or video
+                          </span>
+                        </span>
+                        <input
+                          id="media-upload"
+                          type="file"
+                          accept="image/*,video/*"
+                          className="hidden"
+                          onChange={handleFileChange}
+                        />
+                      </label>
+                    </div>
+                    
+                    {mediaPreview && (
+                      <div className="w-32 h-32 relative border border-fashion-gold/20 rounded-md overflow-hidden">
+                        {mediaType === 'image' ? (
+                          <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
+                        ) : mediaType === 'video' ? (
+                          <video className="w-full h-full object-cover" controls>
+                            <source src={mediaPreview} />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          renderMediaPreview(mediaPreview, editingProject?.media_type || null)
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMediaFile(null);
+                            setMediaPreview(null);
+                            setMediaType(null);
+                          }}
+                          className="absolute top-1 right-1 bg-black/60 rounded-full p-1 text-white hover:bg-black/80"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {uploadProgress > 0 && uploadProgress < 100 && (
+                    <div className="w-full bg-black/40 rounded-full h-2.5 mt-2">
+                      <div className="bg-fashion-gold h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-2 pt-2">
+                  <Switch
+                    id="accepts-volunteers"
+                    checked={acceptsVolunteers}
+                    onCheckedChange={setAcceptsVolunteers}
+                  />
+                  <Label htmlFor="accepts-volunteers" className="text-fashion-champagne/80">
+                    This project accepts volunteers
+                  </Label>
                 </div>
               </div>
               
