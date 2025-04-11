@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Timeline item type
 type TimelineItem = {
-  id: number;
+  id: string;
   year: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ type TimelineItem = {
 
 // Bio content type
 type BioContent = {
-  id: number;
+  id: string;
   title: string;
   content: string;
 };
@@ -39,8 +39,8 @@ const BiographySection = () => {
         
         if (bioError && bioError.code !== 'PGRST116') {
           console.error('Error fetching bio content:', bioError);
-        } else {
-          setBioContent(bioData);
+        } else if (bioData) {
+          setBioContent(bioData as BioContent);
         }
         
         // Fetch milestones
@@ -51,8 +51,8 @@ const BiographySection = () => {
         
         if (timelineError) {
           console.error('Error fetching milestones:', timelineError);
-        } else {
-          setMilestones(timelineData || []);
+        } else if (timelineData) {
+          setMilestones(timelineData as TimelineItem[]);
         }
       } catch (error) {
         console.error('Error fetching bio data:', error);
@@ -83,21 +83,21 @@ const BiographySection = () => {
 
   // Fallback data if database is empty
   const fallbackBioContent = {
-    id: 1,
+    id: '1',
     title: "Multi-talented Fashion Icon",
     content: "Felix Oloo is a Kenyan-born international model who has quickly risen to prominence in the fashion industry. Known for his striking features and commanding runway presence, Felix has become a favorite for designers seeking to make a bold statement with their collections.\n\nFrom modeling and judging to organizing prestigious events, Felix has carved out a reputable name in Kenya's fashion and pageant scene, blending elegance with leadership. His ability to embody diverse characters and aesthetics has made him versatile across editorial, campaign, and runway projects."
   };
   
   const fallbackMilestones = [
     {
-      id: 1,
+      id: '1',
       year: '2023',
       title: 'Major Runway Shows',
       description: 'Walked for top designers at Nairobi Fashion Week and East African Fashion Summit, establishing presence in regional haute couture.',
       image_url: '/lovable-uploads/dd5de1ca-c0ec-42fb-b873-60644077c079.png'
     },
     {
-      id: 2,
+      id: '2',
       year: '2022',
       title: 'Campaign Season',
       description: 'Featured in campaigns for leading African fashion brands, showcasing versatility across different aesthetics and styles.',

@@ -14,13 +14,13 @@ import { Label } from "@/components/ui/label";
 
 // Types
 type BioContent = {
-  id: number;
+  id: string;
   title: string;
   content: string;
 };
 
 type Milestone = {
-  id: number;
+  id: string;
   year: string;
   title: string;
   description: string;
@@ -37,8 +37,8 @@ const AdminBio = () => {
   const [submittingBio, setSubmittingBio] = useState(false);
   
   const [milestones, setMilestones] = useState<Milestone[]>([]);
-  const [milestone, setMilestone] = useState({
-    id: 0,
+  const [milestone, setMilestone] = useState<Milestone>({
+    id: '',
     year: '',
     title: '',
     description: '',
@@ -70,7 +70,7 @@ const AdminBio = () => {
       }
       
       if (data) {
-        setBioContent(data);
+        setBioContent(data as BioContent);
         setBioTitle(data.title);
         setBioText(data.content);
       }
@@ -94,7 +94,7 @@ const AdminBio = () => {
         throw error;
       }
       
-      setMilestones(data || []);
+      setMilestones(data as Milestone[] || []);
     } catch (error) {
       console.error('Error fetching milestones:', error);
       toast.error('Failed to load milestones');
@@ -146,7 +146,7 @@ const AdminBio = () => {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          setBioContent(data[0]);
+          setBioContent(data[0] as BioContent);
         }
         
         toast.success('Bio content created successfully');
@@ -163,7 +163,7 @@ const AdminBio = () => {
 
   const resetMilestoneForm = () => {
     setMilestone({
-      id: 0,
+      id: '',
       year: '',
       title: '',
       description: '',
@@ -201,7 +201,7 @@ const AdminBio = () => {
     setActiveTab("add-milestone");
   };
 
-  const handleDeleteMilestone = async (id: number) => {
+  const handleDeleteMilestone = async (id: string) => {
     if (!confirm('Are you sure you want to delete this milestone?')) {
       return;
     }
@@ -287,7 +287,7 @@ const AdminBio = () => {
         if (error) throw error;
         
         if (data) {
-          setMilestones([...milestones, ...data]);
+          setMilestones([...milestones, ...(data as Milestone[])]);
         }
         
         toast.success('Milestone created successfully');
