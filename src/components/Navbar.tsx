@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LockKeyhole } from 'lucide-react';
+import { Menu, X, LockKeyhole, BookOpen, FolderPlus, Users } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,10 +38,22 @@ const Navbar = () => {
         <Link to="/" className="font-serif text-2xl font-bold gold-text">FELIX OLOO</Link>
         
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-6">
           <Link to="/portfolio" className={`nav-link ${isActive('/portfolio') ? 'after:w-full opacity-100' : ''}`}>Portfolio</Link>
           <Link to="/bio" className={`nav-link ${isActive('/bio') ? 'after:w-full opacity-100' : ''}`}>Bio</Link>
           <Link to="/events" className={`nav-link ${isActive('/events') ? 'after:w-full opacity-100' : ''}`}>Events</Link>
+          <Link to="/blog" className={`nav-link ${isActive('/blog') ? 'after:w-full opacity-100' : ''}`}>
+            <BookOpen size={16} className="mr-1 inline" />
+            Blog
+          </Link>
+          <Link to="/projects" className={`nav-link ${isActive('/projects') ? 'after:w-full opacity-100' : ''}`}>
+            <FolderPlus size={16} className="mr-1 inline" />
+            Projects
+          </Link>
+          <Link to="/volunteer" className={`nav-link ${isActive('/volunteer') ? 'after:w-full opacity-100' : ''}`}>
+            <Users size={16} className="mr-1 inline" />
+            Volunteer
+          </Link>
           <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
           <Link to="/admin/login" className="flex items-center text-fashion-champagne/70 hover:text-fashion-gold transition-colors">
             <LockKeyhole size={16} className="mr-1" />
@@ -65,6 +77,18 @@ const Navbar = () => {
             <Link to="/portfolio" className={`nav-link ${isActive('/portfolio') ? 'after:w-full opacity-100' : ''}`}>Portfolio</Link>
             <Link to="/bio" className={`nav-link ${isActive('/bio') ? 'after:w-full opacity-100' : ''}`}>Bio</Link>
             <Link to="/events" className={`nav-link ${isActive('/events') ? 'after:w-full opacity-100' : ''}`}>Events</Link>
+            <Link to="/blog" className={`nav-link ${isActive('/blog') ? 'after:w-full opacity-100' : ''}`}>
+              <BookOpen size={16} className="mr-1 inline" />
+              Blog
+            </Link>
+            <Link to="/projects" className={`nav-link ${isActive('/projects') ? 'after:w-full opacity-100' : ''}`}>
+              <FolderPlus size={16} className="mr-1 inline" />
+              Projects
+            </Link>
+            <Link to="/volunteer" className={`nav-link ${isActive('/volunteer') ? 'after:w-full opacity-100' : ''}`}>
+              <Users size={16} className="mr-1 inline" />
+              Volunteer
+            </Link>
             <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
             <Link to="/admin/login" className="flex items-center text-fashion-champagne/70 hover:text-fashion-gold transition-colors px-2 py-1">
               <LockKeyhole size={16} className="mr-1" />

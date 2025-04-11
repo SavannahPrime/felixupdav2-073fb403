@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CameraIcon, Image, Users, Calendar, Edit, Trash, LayoutDashboard, LogOut, Settings, MessageSquare } from 'lucide-react';
+import { CameraIcon, Image, Users, Calendar, Edit, Trash, LayoutDashboard, LogOut, Settings, MessageSquare, BookOpen, FolderPlus, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -46,6 +46,9 @@ const AdminDashboard = () => {
             <NavItem icon={<Image size={20} />} label="Portfolio" />
             <NavItem icon={<Users size={20} />} label="Bio" />
             <NavItem icon={<Calendar size={20} />} label="Events" />
+            <NavItem icon={<BookOpen size={20} />} label="Blog" />
+            <NavItem icon={<FolderPlus size={20} />} label="Projects" />
+            <NavItem icon={<UserPlus size={20} />} label="Volunteers" />
             <NavItem icon={<MessageSquare size={20} />} label="Messages" />
             <NavItem icon={<Settings size={20} />} label="Settings" />
           </ul>
@@ -76,11 +79,13 @@ const AdminDashboard = () => {
         
         <main className="p-6">
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-black/30 backdrop-blur-md border border-fashion-gold/20">
+            <TabsList className="grid w-full grid-cols-6 bg-black/30 backdrop-blur-md border border-fashion-gold/20">
               <TabsTrigger value="overview" className="data-[state=active]:text-fashion-gold">Overview</TabsTrigger>
               <TabsTrigger value="content" className="data-[state=active]:text-fashion-gold">Content</TabsTrigger>
+              <TabsTrigger value="blog" className="data-[state=active]:text-fashion-gold">Blog</TabsTrigger>
+              <TabsTrigger value="projects" className="data-[state=active]:text-fashion-gold">Projects</TabsTrigger>
+              <TabsTrigger value="volunteers" className="data-[state=active]:text-fashion-gold">Volunteers</TabsTrigger>
               <TabsTrigger value="messages" className="data-[state=active]:text-fashion-gold">Messages</TabsTrigger>
-              <TabsTrigger value="analytics" className="data-[state=active]:text-fashion-gold">Analytics</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="mt-6">
@@ -92,22 +97,22 @@ const AdminDashboard = () => {
                   icon={<Image className="text-blue-400" />} 
                 />
                 <StatCard 
-                  title="Upcoming Events" 
-                  value="8" 
+                  title="Blog Posts" 
+                  value="15" 
                   change="+3 this month" 
-                  icon={<Calendar className="text-purple-400" />} 
+                  icon={<BookOpen className="text-purple-400" />} 
                 />
                 <StatCard 
-                  title="Inquiries" 
+                  title="Active Projects" 
+                  value="4" 
+                  change="+1 this month" 
+                  icon={<FolderPlus className="text-amber-400" />} 
+                />
+                <StatCard 
+                  title="New Volunteers" 
                   value="12" 
-                  change="+5 unread" 
-                  icon={<MessageSquare className="text-green-400" />} 
-                />
-                <StatCard 
-                  title="Profile Views" 
-                  value="1,458" 
-                  change="+24% this month" 
-                  icon={<Users className="text-amber-400" />} 
+                  change="+5 this week" 
+                  icon={<UserPlus className="text-green-400" />} 
                 />
               </div>
               
@@ -144,21 +149,21 @@ const AdminDashboard = () => {
                 </div>
                 
                 <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-                  <h3 className="text-xl font-serif text-fashion-champagne mb-4">Upcoming Events</h3>
+                  <h3 className="text-xl font-serif text-fashion-champagne mb-4">Recent Volunteer Signups</h3>
                   <div className="space-y-4">
                     {[
-                      { title: "Paris Fashion Week", date: "March 15-22, 2025", type: "Runway" },
-                      { title: "Vogue Magazine Editorial", date: "April 10, 2025", type: "Editorial" },
-                      { title: "Charity Gala", date: "May 28, 2025", type: "Appearance" }
-                    ].map((event, i) => (
+                      { name: "James Wilson", project: "African Fashion Initiative", date: "2 days ago" },
+                      { name: "Maria Rodriguez", project: "Sustainable Fashion Showcase", date: "3 days ago" },
+                      { name: "David Chen", project: "African Fashion Initiative", date: "5 days ago" }
+                    ].map((volunteer, i) => (
                       <div key={i} className="flex items-center justify-between p-3 border-b border-fashion-gold/10 last:border-0">
                         <div>
-                          <h4 className="text-fashion-champagne">{event.title}</h4>
+                          <h4 className="text-fashion-champagne">{volunteer.name}</h4>
                           <div className="flex items-center">
                             <span className="text-xs mr-2 px-2 py-0.5 rounded bg-fashion-gold/10 text-fashion-gold">
-                              {event.type}
+                              {volunteer.project}
                             </span>
-                            <p className="text-xs text-fashion-champagne/60">{event.date}</p>
+                            <p className="text-xs text-fashion-champagne/60">{volunteer.date}</p>
                           </div>
                         </div>
                         <div className="flex space-x-2">
@@ -178,6 +183,18 @@ const AdminDashboard = () => {
             
             <TabsContent value="content" className="mt-6">
               <ContentManager />
+            </TabsContent>
+            
+            <TabsContent value="blog" className="mt-6">
+              <BlogManager />
+            </TabsContent>
+            
+            <TabsContent value="projects" className="mt-6">
+              <ProjectsManager />
+            </TabsContent>
+            
+            <TabsContent value="volunteers" className="mt-6">
+              <VolunteersManager />
             </TabsContent>
             
             <TabsContent value="messages" className="mt-6">
@@ -207,37 +224,6 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="analytics" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-                  <h3 className="text-xl font-serif text-fashion-champagne mb-4">Profile Performance</h3>
-                  <div className="h-64 flex items-center justify-center">
-                    <p className="text-fashion-champagne/60">Analytics visualization would appear here</p>
-                  </div>
-                </div>
-                
-                <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-                  <h3 className="text-xl font-serif text-fashion-champagne mb-4">Engagement Metrics</h3>
-                  <div className="space-y-4">
-                    {[
-                      { metric: "Portfolio Views", value: "2,450", change: "+18%" },
-                      { metric: "Contact Inquiries", value: "38", change: "+12%" },
-                      { metric: "Social Media Clicks", value: "825", change: "+24%" },
-                      { metric: "Average Time on Page", value: "3:24", change: "+0:42" }
-                    ].map((item, i) => (
-                      <div key={i} className="flex justify-between items-center p-3 border-b border-fashion-gold/10 last:border-0">
-                        <span className="text-fashion-champagne">{item.metric}</span>
-                        <div className="flex items-center">
-                          <span className="text-fashion-champagne font-medium mr-2">{item.value}</span>
-                          <span className="text-xs text-green-400">{item.change}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </TabsContent>
           </Tabs>
@@ -322,6 +308,214 @@ const ContentManager = () => {
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+};
+
+const BlogManager = () => {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-serif text-fashion-champagne">Blog Posts Manager</h3>
+        <button className="btn-luxury py-2 flex items-center">
+          <BookOpen size={16} className="mr-2" />
+          Create New Post
+        </button>
+      </div>
+      
+      <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-fashion-gold/20">
+              <TableHead className="text-fashion-champagne/80">Title</TableHead>
+              <TableHead className="text-fashion-champagne/80">Date</TableHead>
+              <TableHead className="text-fashion-champagne/80">Status</TableHead>
+              <TableHead className="text-fashion-champagne/80">Tags</TableHead>
+              <TableHead className="text-fashion-champagne/80 text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {[
+              { id: 1, title: "My Journey Through Paris Fashion Week", date: "March 15, 2025", status: "Published", tags: ["Fashion Week", "Paris", "Runway"] },
+              { id: 2, title: "Behind the Scenes: Vogue Editorial Shoot", date: "February 23, 2025", status: "Published", tags: ["Editorial", "Magazine", "Photography"] },
+              { id: 3, title: "Model Fitness: My Daily Routine", date: "January 30, 2025", status: "Published", tags: ["Fitness", "Wellness", "Lifestyle"] },
+              { id: 4, title: "Upcoming Spring Collection Preview", date: "April 5, 2025", status: "Draft", tags: ["Preview", "Collection", "Spring"] },
+              { id: 5, title: "Sustainability in Fashion: My Perspective", date: "May 12, 2025", status: "Draft", tags: ["Sustainability", "Environment", "Future"] }
+            ].map((post) => (
+              <TableRow key={post.id} className="border-fashion-gold/10">
+                <TableCell className="font-medium text-fashion-champagne">{post.title}</TableCell>
+                <TableCell className="text-fashion-champagne/80">{post.date}</TableCell>
+                <TableCell>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    post.status === 'Published' ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'
+                  }`}>
+                    {post.status}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {post.tags.map((tag, i) => (
+                      <span key={i} className="text-xs px-2 py-0.5 bg-fashion-gold/10 text-fashion-gold/80 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-2">
+                    <button className="p-1 text-fashion-champagne/60 hover:text-fashion-gold transition-colors">
+                      <Edit size={16} />
+                    </button>
+                    <button className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors">
+                      <Trash size={16} />
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+};
+
+const ProjectsManager = () => {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-serif text-fashion-champagne">Projects Manager</h3>
+        <button className="btn-luxury py-2 flex items-center">
+          <FolderPlus size={16} className="mr-2" />
+          Create New Project
+        </button>
+      </div>
+      
+      <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-fashion-gold/20">
+              <TableHead className="text-fashion-champagne/80">Project</TableHead>
+              <TableHead className="text-fashion-champagne/80">Duration</TableHead>
+              <TableHead className="text-fashion-champagne/80">Status</TableHead>
+              <TableHead className="text-fashion-champagne/80">Location</TableHead>
+              <TableHead className="text-fashion-champagne/80">Volunteers</TableHead>
+              <TableHead className="text-fashion-champagne/80 text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {[
+              { id: 1, title: "African Fashion Initiative", duration: "Jan - Dec 2025", status: "Ongoing", location: "Nairobi & Paris", volunteers: 24 },
+              { id: 2, title: "Sustainable Fashion Showcase", duration: "Jun - Jul 2025", status: "Upcoming", location: "London", volunteers: 15 },
+              { id: 3, title: "Youth Model Development Workshop", duration: "Oct - Dec 2024", status: "Completed", location: "Virtual & New York", volunteers: 50 },
+              { id: 4, title: "Fashion Industry Diversity Panel", duration: "Aug 2025", status: "Planning", location: "Milan", volunteers: 8 }
+            ].map((project) => (
+              <TableRow key={project.id} className="border-fashion-gold/10">
+                <TableCell className="font-medium text-fashion-champagne">{project.title}</TableCell>
+                <TableCell className="text-fashion-champagne/80">{project.duration}</TableCell>
+                <TableCell>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    project.status === 'Ongoing' ? 'bg-green-500/10 text-green-400' : 
+                    project.status === 'Upcoming' ? 'bg-blue-500/10 text-blue-400' : 
+                    project.status === 'Planning' ? 'bg-amber-500/10 text-amber-400' :
+                    'bg-gray-500/10 text-gray-400'
+                  }`}>
+                    {project.status}
+                  </span>
+                </TableCell>
+                <TableCell className="text-fashion-champagne/80">{project.location}</TableCell>
+                <TableCell className="text-fashion-champagne/80">{project.volunteers}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-2">
+                    <button className="p-1 text-fashion-champagne/60 hover:text-fashion-gold transition-colors">
+                      <Edit size={16} />
+                    </button>
+                    <button className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors">
+                      <Trash size={16} />
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+};
+
+const VolunteersManager = () => {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-serif text-fashion-champagne">Volunteers Manager</h3>
+        <div className="flex space-x-2">
+          <button className="px-3 py-2 bg-fashion-gold/10 border border-fashion-gold/30 rounded-md text-fashion-gold text-sm hover:bg-fashion-gold/20 transition-colors">
+            Export Data
+          </button>
+          <button className="btn-luxury py-2 flex items-center">
+            <UserPlus size={16} className="mr-2" />
+            Add Volunteer
+          </button>
+        </div>
+      </div>
+      
+      <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-fashion-gold/20">
+              <TableHead className="text-fashion-champagne/80">Name</TableHead>
+              <TableHead className="text-fashion-champagne/80">Contact</TableHead>
+              <TableHead className="text-fashion-champagne/80">Project</TableHead>
+              <TableHead className="text-fashion-champagne/80">Availability</TableHead>
+              <TableHead className="text-fashion-champagne/80">Joined</TableHead>
+              <TableHead className="text-fashion-champagne/80 text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {[
+              { id: 1, name: "James Wilson", email: "james.w@example.com", phone: "+1 (123) 456-7890", project: "African Fashion Initiative", availability: ["Weekends", "Evenings"], joined: "2 days ago" },
+              { id: 2, name: "Maria Rodriguez", email: "maria.r@example.com", phone: "+1 (234) 567-8901", project: "Sustainable Fashion Showcase", availability: ["Weekdays"], joined: "3 days ago" },
+              { id: 3, name: "David Chen", email: "david.c@example.com", phone: "+1 (345) 678-9012", project: "African Fashion Initiative", availability: ["Full-time"], joined: "5 days ago" },
+              { id: 4, name: "Aisha Johnson", email: "aisha.j@example.com", phone: "+1 (456) 789-0123", project: "Youth Model Development Workshop", availability: ["Weekends"], joined: "1 week ago" },
+              { id: 5, name: "Miguel Santos", email: "miguel.s@example.com", phone: "+1 (567) 890-1234", project: "Fashion Industry Diversity Panel", availability: ["Evenings", "Weekends"], joined: "2 weeks ago" }
+            ].map((volunteer) => (
+              <TableRow key={volunteer.id} className="border-fashion-gold/10">
+                <TableCell className="font-medium text-fashion-champagne">{volunteer.name}</TableCell>
+                <TableCell>
+                  <div className="text-fashion-champagne/80 text-sm">{volunteer.email}</div>
+                  <div className="text-fashion-champagne/60 text-xs">{volunteer.phone}</div>
+                </TableCell>
+                <TableCell>
+                  <span className="text-xs px-2 py-1 bg-fashion-gold/10 text-fashion-gold/80 rounded-full">
+                    {volunteer.project}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {volunteer.availability.map((time, i) => (
+                      <span key={i} className="text-xs px-2 py-0.5 bg-black/40 text-fashion-champagne/80 rounded-full">
+                        {time}
+                      </span>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="text-fashion-champagne/60 text-sm">{volunteer.joined}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-2">
+                    <button className="p-1 text-fashion-champagne/60 hover:text-fashion-gold transition-colors">
+                      <Edit size={16} />
+                    </button>
+                    <button className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors">
+                      <Trash size={16} />
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

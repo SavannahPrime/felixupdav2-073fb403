@@ -9,6 +9,9 @@ import Portfolio from "./pages/Portfolio";
 import Bio from "./pages/Bio";
 import Events from "./pages/Events";
 import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import Projects from "./pages/Projects";
+import Volunteer from "./pages/Volunteer";
 import AdminLogin from "./pages/Admin/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import NotFound from "./pages/NotFound";
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/bio" element={<Bio />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/volunteer" element={<Volunteer />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
