@@ -129,7 +129,7 @@ const PortfolioGrid = () => {
           {filteredItems.map(item => (
             <div 
               key={item.id}
-              className="portfolio-item"
+              className="portfolio-item group" // Added 'group' class directly here
               onClick={() => handleItemClick(item)}
             >
               <img 
