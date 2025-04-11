@@ -1,5 +1,5 @@
 
-import { Instagram, Linkedin, TikTok } from 'lucide-react';
+import { Instagram, Linkedin, CircleUser } from 'lucide-react';
 import { useState } from 'react';
 
 interface SocialMediaDockProps {
@@ -18,7 +18,7 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
     },
     { 
       platform: 'tiktok', 
-      icon: TikTok, 
+      icon: CircleUser, // Using CircleUser icon as a replacement for TikTok
       url: 'https://tiktok.com/@felixoloo',
       color: 'bg-black'
     },
