@@ -17,6 +17,7 @@ import {
   Moon
 } from 'lucide-react';
 import { toast } from 'sonner';
+import TooltipWrapper from '../ui/TooltipWrapper';
 
 // Theme interfaces
 export type ThemeType = 'dark' | 'light';
@@ -144,34 +145,38 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title, currentPath 
         </nav>
         
         <div className="absolute bottom-20 left-0 w-20 md:w-64 p-4">
-          <button 
-            onClick={toggleTheme}
-            className={`flex items-center justify-center md:justify-start w-full py-2 px-3 ${
-              theme === 'dark'
-                ? 'text-fashion-champagne/70 hover:text-fashion-gold'
-                : 'text-slate-600 hover:text-amber-600'
-            } transition-colors rounded-md`}
-          >
-            {theme === 'dark' 
-              ? <Sun size={20} className="mr-0 md:mr-2" /> 
-              : <Moon size={20} className="mr-0 md:mr-2" />
-            }
-            <span className="hidden md:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-          </button>
+          <TooltipWrapper>
+            <button 
+              onClick={toggleTheme}
+              className={`flex items-center justify-center md:justify-start w-full py-2 px-3 ${
+                theme === 'dark'
+                  ? 'text-fashion-champagne/70 hover:text-fashion-gold'
+                  : 'text-slate-600 hover:text-amber-600'
+              } transition-colors rounded-md`}
+            >
+              {theme === 'dark' 
+                ? <Sun size={20} className="mr-0 md:mr-2" /> 
+                : <Moon size={20} className="mr-0 md:mr-2" />
+              }
+              <span className="hidden md:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            </button>
+          </TooltipWrapper>
         </div>
         
         <div className="absolute bottom-0 left-0 w-20 md:w-64 p-4 border-t border-fashion-gold/20">
-          <button 
-            onClick={handleLogout}
-            className={`flex items-center justify-center md:justify-start w-full py-2 px-3 ${
-              theme === 'dark'
-                ? 'text-fashion-champagne/70 hover:text-fashion-gold'
-                : 'text-slate-600 hover:text-amber-600'
-            } transition-colors rounded-md`}
-          >
-            <LogOut size={20} className="mr-0 md:mr-2" />
-            <span className="hidden md:inline">Logout</span>
-          </button>
+          <TooltipWrapper>
+            <button 
+              onClick={handleLogout}
+              className={`flex items-center justify-center md:justify-start w-full py-2 px-3 ${
+                theme === 'dark'
+                  ? 'text-fashion-champagne/70 hover:text-fashion-gold'
+                  : 'text-slate-600 hover:text-amber-600'
+              } transition-colors rounded-md`}
+            >
+              <LogOut size={20} className="mr-0 md:mr-2" />
+              <span className="hidden md:inline">Logout</span>
+            </button>
+          </TooltipWrapper>
         </div>
       </div>
       
@@ -230,13 +235,15 @@ const NavItem = ({
   
   return (
     <li>
-      <Link 
-        to={to} 
-        className={`flex items-center justify-center md:justify-start py-2 px-3 rounded-md transition-colors ${classes}`}
-      >
-        <span className="mr-0 md:mr-3">{icon}</span>
-        <span className="hidden md:inline">{label}</span>
-      </Link>
+      <TooltipWrapper>
+        <Link 
+          to={to} 
+          className={`flex items-center justify-center md:justify-start py-2 px-3 rounded-md transition-colors ${classes}`}
+        >
+          <span className="mr-0 md:mr-3">{icon}</span>
+          <span className="hidden md:inline">{label}</span>
+        </Link>
+      </TooltipWrapper>
     </li>
   );
 };

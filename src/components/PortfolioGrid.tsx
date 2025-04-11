@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import SocialMediaDock from './SocialMediaDock';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import TooltipWrapper from './ui/TooltipWrapper';
 
 // Portfolio item type
 type PortfolioItem = {
@@ -151,9 +152,11 @@ const PortfolioGrid = () => {
                   </div>
                 </div>
                 
-                {/* Social Media Dock */}
+                {/* Social Media Dock wrapped with TooltipWrapper */}
                 <div className={`absolute top-4 right-4 opacity-0 transition-all duration-300 ${hoveredItem === item.id ? 'opacity-100 translate-y-0' : 'translate-y-2'}`}>
-                  <SocialMediaDock />
+                  <TooltipWrapper>
+                    <SocialMediaDock />
+                  </TooltipWrapper>
                 </div>
               </div>
             ))}
@@ -196,7 +199,9 @@ const PortfolioGrid = () => {
                   </span>
                 </div>
               </div>
-              <SocialMediaDock />
+              <TooltipWrapper>
+                <SocialMediaDock />
+              </TooltipWrapper>
             </div>
           </div>
         </div>
