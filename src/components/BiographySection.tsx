@@ -108,7 +108,7 @@ const BiographySection = () => {
   return (
     <section id="bio" className="py-20 relative">
       <div className="luxury-container">
-        <h2 className="section-title mb-16">Biography</h2>
+        <h2 className="section-title mb-16">Mr Oloo Biography</h2>
         
         {isLoading ? (
           <div className="flex justify-center items-center py-10">

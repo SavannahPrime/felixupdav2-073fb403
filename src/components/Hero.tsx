@@ -87,7 +87,7 @@ const Hero = () => {
       {/* Hero image with cosmic overlay */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="/lovable-uploads/9600aaa4-5bb4-4bdb-93ca-562173f75595.png" 
+          src="/lovable-uploads/felix_oloo_-20250406-0001.jpg" 
           alt="Felix Oloo" 
           className="w-full h-full object-cover object-center opacity-40"
           style={{ transform: `scale(1.1) translateY(${scrollY * 0.1}px)` }}
@@ -123,70 +123,14 @@ const Hero = () => {
             High Fashion Model & Runway Specialist
           </p>
           
-          {/* Agency affiliations with hover effects - updated to match the image */}
-          <TooltipWrapper>
-            <div className="flex justify-center space-x-6 opacity-0 animate-fade-in" style={{ animationDelay: '1s' }}>
-              <HoverCard openDelay={200} closeDelay={100}>
-                <HoverCardTrigger asChild>
-                  <span 
-                    className={`px-4 py-1 border ${isImgHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                                transition-all duration-300 cursor-pointer`}
-                    onMouseEnter={() => setIsImgHovered(true)}
-                    onMouseLeave={() => setIsImgHovered(false)}
-                  >
-                    IMG
-                  </span>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                  <div className="flex flex-col space-y-2">
-                    <h4 className="text-fashion-gold text-sm">IMG Models</h4>
-                    <p className="text-xs text-fashion-champagne/70">World's leading modeling agency representing fashion's biggest talents.</p>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-              
-              <HoverCard openDelay={200} closeDelay={100}>
-                <HoverCardTrigger asChild>
-                  <span 
-                    className={`px-4 py-1 border ${isEliteHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                                transition-all duration-300 cursor-pointer`}
-                    onMouseEnter={() => setIsEliteHovered(true)}
-                    onMouseLeave={() => setIsEliteHovered(false)}
-                  >
-                    ELITE
-                  </span>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                  <div className="flex flex-col space-y-2">
-                    <h4 className="text-fashion-gold text-sm">Elite Model Management</h4>
-                    <p className="text-xs text-fashion-champagne/70">Prestigious agency with a heritage of discovering supermodels since 1972.</p>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-              
-              <HoverCard openDelay={200} closeDelay={100}>
-                <HoverCardTrigger asChild>
-                  <span 
-                    className={`px-4 py-1 border ${isFordHovered ? 'bg-fashion-gold text-fashion-midnight' : 'border-fashion-gold/30 text-fashion-gold/80'} 
-                                transition-all duration-300 cursor-pointer`}
-                    onMouseEnter={() => setIsFordHovered(true)}
-                    onMouseLeave={() => setIsFordHovered(false)}
-                  >
-                    FORD
-                  </span>
-                </HoverCardTrigger>
-                <HoverCardContent className="w-80 bg-fashion-midnight/90 backdrop-blur-lg border border-fashion-gold/20 text-fashion-champagne">
-                  <div className="flex flex-col space-y-2">
-                    <h4 className="text-fashion-gold text-sm">Ford Models</h4>
-                    <p className="text-xs text-fashion-champagne/70">Iconic agency with a legacy of representing top models for over 75 years.</p>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-            </div>
-          </TooltipWrapper>
-        </div>
-      </div>
-      
+          {/* Social media accounts with hover effects */}
+                <TooltipWrapper>
+                <div className="flex justify-center space-x-6 opacity-0 animate-fade-in" style={{ animationDelay: '1s' }}>
+                  {/* Content removed as per request */}
+                </div>
+                </TooltipWrapper>
+              </div>
+              </div>
       {/* Social media icons */}
       <div className="absolute bottom-32 right-8 md:right-12 animate-fade-in" style={{ animationDelay: '1.5s' }}>
         <SocialMediaDock className="flex-col space-y-4" />

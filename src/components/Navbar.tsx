@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, LockKeyhole, BookOpen, FolderPlus, Users, ChevronDown } from 'lucide-react';
@@ -45,11 +44,8 @@ const Navbar = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-fashion-midnight/90 backdrop-blur-md py-3' : 'bg-transparent py-6'}`}>
       <div className="luxury-container flex justify-between items-center">
         <Link to="/" className="font-serif text-2xl font-bold gold-text">FELIX OLOO</Link>
-        
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/portfolio" className={`nav-link ${isActive('/portfolio') ? 'after:w-full opacity-100' : ''}`}>Portfolio</Link>
-          
           {/* About Dropdown */}
           <NavigationMenu>
             <NavigationMenuList>
@@ -57,37 +53,38 @@ const Navbar = () => {
                 <NavigationMenuTrigger className={`nav-link ${
                   isActive('/bio') ? 'after:w-full opacity-100' : ''
                 }`}>
+                  <Users size={16} className="mr-1 inline" /> {/* Icon added here */}
                   About
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-3 p-4 bg-fashion-midnight/95 backdrop-blur-md border border-fashion-gold/20">
+                  <ul className="grid w-[200px] gap-3 p-4 bg-black backdrop-blur-md border border-fashion-gold/20">
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
                           to="/bio"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-fashion-gold/10 hover:text-fashion-gold"
                         >
-                          <div className="text-sm font-medium text-fashion-champagne">Our Story</div>
+                          <div className="text-sm font-medium text-fashion-champagne">Biography</div>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/bio#mission"
+                          to="/portfolio"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-fashion-gold/10 hover:text-fashion-gold"
                         >
-                          <div className="text-sm font-medium text-fashion-champagne">Our Mission</div>
+                          <div className="text-sm font-medium text-fashion-champagne">Portfolio</div>
                         </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
                         <Link
-                          to="/bio#team"
+                          to="/contact"
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-fashion-gold/10 hover:text-fashion-gold"
                         >
-                          <div className="text-sm font-medium text-fashion-champagne">Our Team</div>
+                          <div className="text-sm font-medium text-fashion-champagne">Contact</div>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -96,7 +93,6 @@ const Navbar = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          
           <Link to="/events" className={`nav-link ${isActive('/events') ? 'after:w-full opacity-100' : ''}`}>Events</Link>
           <Link to="/projects" className={`nav-link ${isActive('/projects') ? 'after:w-full opacity-100' : ''}`}>
             <FolderPlus size={16} className="mr-1 inline" />
@@ -143,13 +139,13 @@ const Navbar = () => {
               </div>
               <div className="pl-4 space-y-2 border-l border-fashion-gold/20">
                 <Link to="/bio" className="block py-1 text-fashion-champagne/80 hover:text-fashion-gold">
-                  Our Story
+                  Biography
                 </Link>
-                <Link to="/bio#mission" className="block py-1 text-fashion-champagne/80 hover:text-fashion-gold">
-                  Our Mission
+                <Link to="/Portfolio" className="block py-1 text-fashion-champagne/80 hover:text-fashion-gold">
+                  Portfolio
                 </Link>
-                <Link to="/bio#team" className="block py-1 text-fashion-champagne/80 hover:text-fashion-gold">
-                  Our Team
+                <Link to="/Contact" className="block py-1 text-fashion-champagne/80 hover:text-fashion-gold">
+                  Contact
                 </Link>
               </div>
             </div>

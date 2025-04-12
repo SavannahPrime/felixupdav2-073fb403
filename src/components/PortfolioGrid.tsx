@@ -84,7 +84,7 @@ const PortfolioGrid = () => {
     return (
       <section id="portfolio" className="py-20 relative">
         <div className="luxury-container">
-          <h2 className="section-title mb-16">Portfolio</h2>
+          <h2 className="section-title mb-16">images</h2>
           <div className="flex justify-center py-20">
             <div className="h-12 w-12 rounded-full border-4 border-fashion-gold border-t-transparent animate-spin"></div>
           </div>
@@ -96,7 +96,7 @@ const PortfolioGrid = () => {
   return (
     <section id="portfolio" className="py-20 relative">
       <div className="luxury-container">
-        <h2 className="section-title mb-16">Portfolio</h2>
+        <h2 className="section-title mb-16">Images</h2>
         
         {/* Filter buttons */}
         <div className="flex flex-wrap justify-center mb-12 gap-2">

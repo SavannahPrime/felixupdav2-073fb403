@@ -19,7 +19,7 @@ const Portfolio = () => {
         <div className="luxury-container">
           <h1 className="section-title mb-6">Portfolio</h1>
           <h2 className="text-xl text-fashion-champagne/80 mb-16 max-w-3xl">
-            Runway, Fashion & Pageant Model
+            Runway Model, Event Organiser & Event Judge 
           </h2>
           <p className="text-fashion-champagne/70 mb-16 max-w-3xl">
             Felix has modeled for major fashion runways, ad campaigns, and high-profile pageants, 
