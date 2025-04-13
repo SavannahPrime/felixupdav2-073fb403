@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Map, Users } from 'lucide-react';
+import { Calendar, Map } from 'lucide-react';
 import SocialMediaDock from '../components/SocialMediaDock';
 
 type Event = {
@@ -16,7 +16,7 @@ type Event = {
 };
 
 const Events = () => {
-  const [events, setEvents] = useState<Event[]>([
+  const [events] = useState<Event[]>([
     {
       id: "1",
       title: "Mr. Nairobi County Pageant",

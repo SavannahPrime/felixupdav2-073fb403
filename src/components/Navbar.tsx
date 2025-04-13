@@ -109,12 +109,12 @@ const Navbar = () => {
             <Users size={16} className="mr-1 inline" />
             Volunteer
           </Link>
-          <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
+         {/* <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
           <Link to="/admin/login" className="flex items-center text-fashion-champagne/70 hover:text-fashion-gold transition-colors">
             <LockKeyhole size={16} className="mr-1" />
             <span className="text-sm">Admin</span>
-          </Link>
-        </div>
+          </Link> */}
+        </div>  
         
         {/* Mobile Menu Button */}
         <button 

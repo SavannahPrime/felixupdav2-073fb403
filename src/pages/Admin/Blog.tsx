@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BookOpen, Plus, Edit, Trash2, Check, X, UploadCloud } from 'lucide-react';
@@ -86,7 +85,7 @@ const AdminBlog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title || !content) {
       toast.error('Please fill in all required fields');
       return;
@@ -94,30 +93,41 @@ const AdminBlog = () => {
 
     try {
       setSubmitting(true);
-      
+
       // Convert comma-separated tags to array
       const tags = tagsInput.split(',')
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
-      
-      // Upload image if provided
+
+      // Upload image if provided using the portfolio concept
       let imageUrl = editingPost?.image_url || null;
-      
       if (imageFile) {
-        const fileName = `blog-${Date.now()}-${imageFile.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('media')
-          .upload(fileName, imageFile);
-        
-        if (uploadError) throw uploadError;
-        
-        const { data: urlData } = await supabase.storage
-          .from('media')
-          .getPublicUrl(fileName);
-        
-        imageUrl = urlData.publicUrl;
+        const fileExt = imageFile.name.split('.').pop();
+        const filePath = `${Date.now()}.${fileExt}`;
+        // Use the "blog" storage bucket (ensure that it exists and is configured properly)
+        const { error: uploadError } = await supabase.storage
+          .from('blog')
+          .upload(filePath, imageFile);
+
+        if (uploadError) {
+          console.error('Image upload error:', uploadError.message);
+          toast.error(`Failed to upload image: ${uploadError.message}`);
+          return;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('blog')
+          .getPublicUrl(filePath);
+
+        if (!publicUrl) {
+          console.error('No public URL returned for the uploaded image');
+          toast.error('Failed to retrieve image URL. Please try again.');
+          return;
+        }
+
+        imageUrl = publicUrl;
       }
-      
+
       if (editingPost) {
         const { error } = await supabase
           .from('blog_posts')
@@ -127,11 +137,16 @@ const AdminBlog = () => {
             image_url: imageUrl,
             tags: tags.length > 0 ? tags : null,
             status,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq('id', editingPost.id);
-          
-        if (error) throw error;
+
+        if (error) {
+          console.error('Error updating blog post:', error.message);
+          toast.error(`Failed to update blog post: ${error.message}`);
+          return;
+        }
+
         toast.success('Blog post updated successfully');
       } else {
         const { error } = await supabase
@@ -142,21 +157,26 @@ const AdminBlog = () => {
               content,
               image_url: imageUrl,
               tags: tags.length > 0 ? tags : null,
-              status
-            }
+              status,
+            },
           ]);
-          
-        if (error) throw error;
+
+        if (error) {
+          console.error('Error creating blog post:', error.message);
+          toast.error(`Failed to create blog post: ${error.message}`);
+          return;
+        }
+
         toast.success('Blog post created successfully');
       }
-      
+
       resetForm();
       fetchPosts();
       setActiveTab("posts");
-      
+
     } catch (error) {
-      console.error('Error saving blog post:', error);
-      toast.error('Failed to save blog post');
+      console.error('Unexpected error:', error);
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }

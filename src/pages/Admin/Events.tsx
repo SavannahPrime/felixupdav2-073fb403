@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
@@ -305,7 +304,7 @@ const AdminEvents = () => {
       
       {/* Add/Edit Event Dialog */}
       <Dialog open={isAddEventDialogOpen} onOpenChange={setIsAddEventDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] bg-fashion-midnight border-fashion-gold/20">
+        <DialogContent className="sm:max-w-[600px] bg-fashion-midnight border-fashion-gold/20 overflow-y-auto max-h-[600px]">
           <DialogHeader>
             <DialogTitle className="text-fashion-champagne">
               {selectedEvent ? 'Edit Event' : 'Add New Event'}

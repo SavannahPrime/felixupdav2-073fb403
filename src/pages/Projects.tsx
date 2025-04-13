@@ -65,9 +65,9 @@ const Projects = () => {
               </span>
             ))}
           </div>
-          {/* Projects list arranged horizontally */}
+          {/* Projects list arranged using flex so that items spread out to fill the ends */}
           <div 
-            className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" 
+            className="relative z-10 flex flex-wrap justify-between gap-8" 
             style={{ transform: `translateY(${scrollY * 0.02}px)` }}
           >
             <ProjectsList />

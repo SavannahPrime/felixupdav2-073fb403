@@ -106,36 +106,50 @@ const AdminProjects = () => {
 
   const uploadMedia = async (): Promise<string | null> => {
     if (!mediaFile) return null;
-    
+
     try {
+      // Create unique file name using Date.now()
       const fileExt = mediaFile.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      const fileName = `${Date.now()}-${mediaFile.name}`;
+      // Store project media in "projects" folder inside the "media" bucket
       const filePath = `projects/${fileName}`;
-      
-      const { error: uploadError, data } = await supabase.storage
+
+      // Upload file into "media" bucket
+      const { error: uploadError } = await supabase.storage
         .from('media')
         .upload(filePath, mediaFile, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
         });
-      
-      if (uploadError) throw uploadError;
-      
-      const { data: { publicUrl } } = supabase.storage
+        
+      if (uploadError) {
+        console.error('Error uploading media:', uploadError.message);
+        toast.error(`Failed to upload media: ${uploadError.message}`);
+        return null;
+      }
+
+      // Retrieve the public URL for the uploaded file
+      const { data } = supabase.storage
         .from('media')
         .getPublicUrl(filePath);
-      
-      return publicUrl;
+
+      if (!data?.publicUrl) {
+        console.error('No public URL returned for uploaded media');
+        toast.error('Failed to retrieve media URL. Please try again.');
+        return null;
+      }
+
+      return data.publicUrl;
     } catch (error) {
-      console.error('Error uploading media:', error);
-      toast.error('Failed to upload media');
+      console.error('Unexpected error uploading media:', error);
+      toast.error('An unexpected error occurred while uploading media');
       return null;
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title || !description) {
       toast.error('Please fill in all required fields');
       return;
@@ -143,14 +157,14 @@ const AdminProjects = () => {
 
     try {
       setSubmitting(true);
-      
+
       let mediaUrl = null;
       if (mediaFile) {
         mediaUrl = await uploadMedia();
       } else if (editingProject?.media_url) {
         mediaUrl = editingProject.media_url;
       }
-      
+
       if (editingProject) {
         const { error } = await supabase
           .from('projects')
@@ -163,10 +177,10 @@ const AdminProjects = () => {
             volunteers_count: volunteersCount,
             media_url: mediaUrl,
             media_type: mediaFile ? mediaType : editingProject.media_type,
-            accepts_volunteers: acceptsVolunteers
+            accepts_volunteers: acceptsVolunteers,
           })
           .eq('id', editingProject.id);
-          
+
         if (error) throw error;
         toast.success('Project updated successfully');
       } else {
@@ -182,17 +196,16 @@ const AdminProjects = () => {
               volunteers_count: volunteersCount,
               media_url: mediaUrl,
               media_type: mediaType,
-              accepts_volunteers: acceptsVolunteers
-            }
+              accepts_volunteers: acceptsVolunteers,
+            },
           ]);
-          
+
         if (error) throw error;
         toast.success('Project created successfully');
       }
-      
+
       resetForm();
       fetchProjects();
-      
     } catch (error) {
       console.error('Error saving project:', error);
       toast.error('Failed to save project');
