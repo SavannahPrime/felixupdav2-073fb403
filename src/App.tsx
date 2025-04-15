@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -23,6 +22,7 @@ import AdminVolunteers from "./pages/Admin/Volunteers";
 import AdminMessages from "./pages/Admin/Messages";
 import AdminSettings from "./pages/Admin/Settings";
 import NotFound from "./pages/NotFound";
+import Navbar from "./components/Navbar"; // Import the Navbar component
 
 const queryClient = new QueryClient();
 
@@ -31,6 +31,7 @@ const App = () => (
     <Toaster />
     <Sonner />
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/portfolio" element={<Portfolio />} />

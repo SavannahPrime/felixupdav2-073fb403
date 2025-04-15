@@ -410,17 +410,19 @@ const AdminBlog = () => {
                     {(imagePreview || editingPost?.image_url) && (
                       <div className="relative">
                         <div className="bg-black/20 border border-fashion-gold/20 rounded-lg p-2">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-20 h-20 rounded-md overflow-hidden">
+                          <div className="flex flex-col items-start space-y-4">
+                            <div className="w-full rounded-md overflow-hidden">
                               <img 
                                 src={imagePreview || editingPost?.image_url || ''} 
                                 alt="Preview" 
-                                className="w-full h-full object-cover"
+                                className="w-full h-auto object-contain"
                               />
                             </div>
-                            <div className="flex-1">
+                            <div className="w-full">
                               <p className="text-sm text-fashion-champagne mb-1">Image Preview</p>
-                              <p className="text-xs text-fashion-champagne/60">{imageFile ? imageFile.name : 'Current image'}</p>
+                              <p className="text-xs text-fashion-champagne/60">
+                                {imageFile ? imageFile.name : 'Current image'}
+                              </p>
                             </div>
                             <button 
                               type="button"
@@ -428,7 +430,7 @@ const AdminBlog = () => {
                                 setImageFile(null);
                                 setImagePreview('');
                                 if (editingPost) {
-                                  setEditingPost({...editingPost, image_url: null});
+                                  setEditingPost({ ...editingPost, image_url: null });
                                 }
                               }}
                               className="p-1 text-fashion-champagne/60 hover:text-red-500 transition-colors"

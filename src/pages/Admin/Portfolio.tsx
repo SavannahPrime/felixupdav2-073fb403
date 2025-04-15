@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Image, Plus, Upload, Trash2, Edit, Check, X } from 'lucide-react';
@@ -331,9 +330,18 @@ const AdminPortfolio = () => {
                     id="category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    placeholder="E.g., Editorial, Runway, Campaign"
+                    placeholder="Select or type category"
+                    list="categoryOptions"
                     className="bg-black/40 border-fashion-gold/30 text-fashion-champagne"
                   />
+                  <datalist id="categoryOptions">
+                    <option value="Editorial" />
+                    <option value="Runway" />
+                    <option value="Campaign" />
+                    <option value="Beauty" />
+                    <option value="Lifestyle" />
+                    <option value="Commercial" />
+                  </datalist>
                 </div>
                 
                 <div>

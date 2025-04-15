@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ImagePlus, Plus, Edit, Trash2, Check, X, Calendar, UploadCloud } from 'lucide-react';
@@ -55,6 +54,7 @@ const AdminBio = () => {
     fetchMilestones();
   }, []);
 
+  // Fetch the front-end bio content from Supabase
   const fetchBioContent = async () => {
     try {
       setLoading(true);
@@ -113,7 +113,7 @@ const AdminBio = () => {
       setSubmittingBio(true);
       
       if (bioContent) {
-        // Update existing bio
+        // Update existing bio content
         const { error } = await supabase
           .from('bio_content')
           .update({

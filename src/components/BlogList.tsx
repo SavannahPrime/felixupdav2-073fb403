@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Calendar, User, Tag, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface BlogPost {
   id: string;
   title: string;
+  slug: string;
+  content: string;
+  image_url: string;
+  created_at: string;
   excerpt: string;
   coverImage: string;
   date: string;
@@ -13,7 +19,11 @@ interface BlogPost {
   readTime: string;
 }
 
-const BlogList = () => {
+interface BlogListProps {
+  posts: BlogPost[];
+}
+
+const BlogList = ({ posts }: BlogListProps) => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,6 +44,10 @@ const BlogList = () => {
           const posts = (data || []).map((post: any) => ({
             id: post.id,
             title: post.title,
+            slug: post.slug,
+            content: post.content,
+            image_url: post.image_url,
+            created_at: post.created_at,
             excerpt: post.content
               ? post.content.length > 150
                 ? post.content.substring(0, 150) + '...'
@@ -171,9 +185,9 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
 
         <div className="flex justify-between items-center">
           <span className="text-xs text-fashion-champagne/60">{post.readTime}</span>
-          <button className="flex items-center text-fashion-gold hover:text-fashion-champagne transition-colors text-sm">
+          <Link to={`/blog/${post.slug}`} className="flex items-center text-fashion-gold hover:text-fashion-champagne transition-colors text-sm">
             Read More <ChevronRight size={16} />
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -45,9 +45,6 @@ const Projects = () => {
           <div className="relative">
             <h1 className="section-title mb-6">
               Projects
-              <div className="absolute -top-3 -right-3 text-xs text-fashion-gold border border-fashion-gold/30 px-2 py-1 rotate-6">
-                CREATIVE LEADERSHIP
-              </div>
             </h1>
             <h2 className="text-xl text-fashion-champagne/80 mb-16 max-w-3xl">
               Whether leading youth programs or planning national fashion contests, Felix's projects merge art, 

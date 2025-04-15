@@ -86,14 +86,10 @@ const Blog = () => {
       </div>
       
       <div className={`pt-32 pb-20 transition-opacity duration-700 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="luxury-container">
+        <div className="luxury-container text-center">
           <h1 className="section-title mb-6">
-            Blog
-            <span className="absolute -top-3 -right-3 text-xs text-fashion-gold border border-fashion-gold/30 px-2 py-1 rotate-6">
-              FASHION INSIGHTS
-            </span>
+        Blog
           </h1>
-          
           <div className="mb-12 max-w-3xl mx-auto">
             <p className="text-fashion-champagne/70 text-center">
               Through his voice and experience, Felix shares thoughts on fashion, youth empowerment, 
