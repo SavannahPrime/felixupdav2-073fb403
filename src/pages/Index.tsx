@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -42,6 +41,54 @@ const Index = () => {
       <Navbar />
       <Hero />
       <PortfolioGrid />
+      
+      {/* Rate Card Section */}
+      <section id="rate-card" className="py-20 bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg">
+        <div className="luxury-container">
+          <h2 className="section-title mb-10 text-4xl font-extrabold tracking-tight text-center">
+            Professional Rates &amp; Services
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Rates List */}
+            <div className="space-y-6">
+              <ul className="space-y-4 text-lg">
+                <li className="flex justify-between items-center border-b border-gray-700 py-2">
+                  <span className="font-medium">Runway Model</span>
+                  <span className="font-semibold">Ksh. 12,000</span>
+                </li>
+                <li className="flex justify-between items-center border-b border-gray-700 py-2">
+                  <span className="font-medium">Runway Training</span>
+                  <span className="font-semibold">Ksh. 30,000</span>
+                </li>
+                <li className="flex justify-between items-center border-b border-gray-700 py-2">
+                  <span className="font-medium">Fashion Shoot</span>
+                  <span className="font-semibold">Ksh. 20,000</span>
+                </li>
+                <li className="flex justify-between items-center border-b border-gray-700 py-2">
+                  <span className="font-medium">Judging</span>
+                  <span className="font-semibold">Ksh. 20,000</span>
+                </li>
+                <li className="flex justify-between items-center border-b border-gray-700 py-2">
+                  <span className="font-medium">Fashion Content Creation</span>
+                  <span className="font-semibold">Ksh. 20,000</span>
+                </li>
+              </ul>
+            </div>
+            {/* Social Metrics */}
+            <div className="flex flex-col justify-center text-center bg-gray-800 p-8 rounded-lg shadow-md">
+              <h3 className="text-2xl font-bold mb-4">Social Metrics</h3>
+              <p className="text-lg mb-2">
+                <span className="font-medium">Instagram:</span> <span className="font-semibold">@felix_oloo_</span>
+              </p>
+              <p className="text-lg">
+                <span className="font-medium">Followers:</span> <span className="font-semibold">27.5k</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Biography Section */}
       <BiographySection />
       
       {/* Endeleza Youth Initiative Section */}
@@ -60,7 +107,7 @@ const Index = () => {
           </Link>
         </div>
       </section>
-      
+
       <Footer />
     </main>
   );

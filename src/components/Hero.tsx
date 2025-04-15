@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import SocialMediaDock from './SocialMediaDock';
@@ -84,7 +83,7 @@ const Hero = () => {
 
   return (
     <div ref={containerRef} className="relative h-screen overflow-hidden">
-      {/* Hero image with cosmic overlay */}
+      {/* Background Image with Cosmic Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/lovable-uploads/felix_oloo_-20250406-0001.jpg" 
@@ -96,52 +95,58 @@ const Hero = () => {
         
         {/* Nebula texture overlay */}
         <div className="nebula-overlay absolute inset-0 bg-gradient-radial from-purple-900/10 to-transparent opacity-30 transition-transform duration-3000"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0ic3RhciIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSJ3aGl0ZSIgc3RvcC1vcGFjaXR5PSIwLjMiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IndoaXRlIiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ0cmFuc3BhcmVudCIvPjxjaXJjbGUgY3g9IjEwJSIgY3k9IjEwJSIgcj0iMXB4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iMzAlIiBjeT0iMjAlIiByPSIwLjVweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9IjUwJSIgY3k9IjE1JSIgcj0iMXB4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iNzAlIiBjeT0iMjAlIiByPSIwLjhweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9IjkwJSIgY3k9IjE1JSIgcj0iMC42cHgiIGZpbGw9InVybCgjc3RhcikiLz48Y2lyY2xlIGN4PSIyMCUiIGN5PSI0MCUiIHI9IjAuN3B4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iNDAlIiBjeT0iMzUlIiByPSIwLjRweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9IjgwJSIgY3k9IjQwJSIgcj0iMC41cHgiIGZpbGw9InVybCgjc3RhcikiLz48Y2lyY2xlIGN4PSIxNSUiIGN5PSI2MCUiIHI9IjAuOHB4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iMzUlIiBjeT0iNjUlIiByPSIwLjZweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9IjU1JSIgY3k9IjcwJSIgcj0iMC45cHgiIGZpbGw9InVybCgjc3RhcikiLz48Y2lyY2xlIGN4PSI3NSUiIGN5PSI2MCUiIHI9IjAuNXB4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iOTUlIiBjeT0iNjUlIiByPSIwLjdweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9IjI1JSIgY3k9IjkwJSIgcj0iMC40cHgiIGZpbGw9InVybCgjc3RhcikiLz48Y2lyY2xlIGN4PSI0NSUiIGN5PSI4NSUiIHI9IjAuNnB4IiBmaWxsPSJ1cmwoI3N0YXIpIi8+PGNpcmNsZSBjeD0iNjUlIiBjeT0iOTAlIiByPSIwLjhweCIgZmlsbD0idXJsKCNzdGFyKSIvPjxjaXJjbGUgY3g9Ijg1JSIgY3k9Ijg1JSIgcj0iMC41cHgiIGZpbGw9InVybCgjc3RhcikiLz48L3N2Zz4=')]"></div>
       </div>
       
-      {/* Hero content */}
+      {/* Hero Content */}
       <div 
-        className="luxury-container relative z-10 flex flex-col justify-center items-center h-full"
+        className="luxury-container relative z-10 flex flex-col justify-center items-center h-full text-center"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       >
-        <div className="text-center max-w-4xl">
-          <h1 
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold text-fashion-champagne mb-6"
-            style={{ transform: `translateY(${-scrollY * 0.2}px)` }}
-          >
-            FELIX OLOO
-          </h1>
-          
-          <div className="relative flex justify-center mb-12 overflow-hidden">
-            <div className="h-[2px] w-24 bg-fashion-gold animate-reveal" style={{ animationDelay: '0.3s' }}></div>
-          </div>
-          
-          <p 
-            className="text-xl md:text-2xl font-sans text-fashion-champagne/80 mb-12 tracking-wider"
-            style={{ transform: `translateY(${-scrollY * 0.1}px)` }}
-          >
-            High Fashion Model & Runway Specialist
-          </p>
-          
-          {/* Social media accounts with hover effects */}
-                <TooltipWrapper>
-                <div className="flex justify-center space-x-6 opacity-0 animate-fade-in" style={{ animationDelay: '1s' }}>
-                  {/* Content removed as per request */}
-                </div>
-                </TooltipWrapper>
-              </div>
-              </div>
-      {/* Social media icons */}
+        {/* Name & Title */}
+        <h1 
+          className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold text-fashion-champagne mb-4"
+          style={{ transform: `translateY(${-scrollY * 0.2}px)` }}
+        >
+          FELIX OLOO
+        </h1>
+        <h2 className="text-xl md:text-2xl font-sans text-fashion-champagne mb-4 tracking-wide">
+          Fashion Model • Runway Instructor • Event Organizer • Judge
+        </h2>
+        
+        {/* Tagline */}
+        <p className="text-lg md:text-xl font-sans text-fashion-champagne/80 mb-6 tracking-wider"
+          style={{ transform: `translateY(${-scrollY * 0.1}px)` }}
+        >
+          Seasoned Fashion Expert | Mentor | Youth Empowerment Advocate
+        </p>
+        
+        {/* Key Achievement */}
+        <p className="text-sm md:text-base font-sans text-fashion-gold uppercase tracking-widest mb-12">
+          Mr. World Kenya Finalist 2024
+        </p>
+        
+        {/* Decorative Divider */}
+        <div className="relative flex justify-center mb-12 overflow-hidden">
+          <div className="h-[2px] w-24 bg-fashion-gold animate-reveal" style={{ animationDelay: '0.3s' }}></div>
+        </div>
+        
+        {/* Social Media Accounts with hover effects */}
+        <TooltipWrapper>
+          <SocialMediaDock className="flex-row space-x-6" />
+        </TooltipWrapper>
+      </div>
+      
+      {/* Social Media Dock (Bottom Right) */}
       <div className="absolute bottom-32 right-8 md:right-12 animate-fade-in" style={{ animationDelay: '1.5s' }}>
         <SocialMediaDock className="flex-col space-y-4" />
       </div>
       
-      {/* Additional visual elements */}
+      {/* Additional Call-to-Action */}
       <div className="absolute bottom-12 left-0 right-0 flex justify-center animate-fade-in" style={{ animationDelay: '1.5s' }}>
         <p className="text-fashion-champagne/60 text-sm uppercase tracking-wider">Press spacebar for runway walk</p>
       </div>
       
-      {/* Cursor spotlight effect */}
+      {/* Cursor Spotlight Effect */}
       <div 
         ref={spotlightRef} 
         className="spotlight"
@@ -158,7 +163,7 @@ const Hero = () => {
         }}
       ></div>
       
-      {/* Measuring tape progress indicator */}
+      {/* Measuring Tape Progress Indicator */}
       <div className="absolute bottom-8 left-8 right-8 h-1 bg-fashion-champagne/10">
         <div className="h-full bg-fashion-gold" style={{ width: `${Math.min((scrollY / (document.body.scrollHeight - window.innerHeight)) * 100, 100)}%` }}>
           <div className="absolute -top-6 -right-1 text-xs text-fashion-gold">

@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 // Timeline item type
@@ -23,7 +22,7 @@ const BiographySection = () => {
   const [milestones, setMilestones] = useState<TimelineItem[]>([]);
   const [bioContent, setBioContent] = useState<BioContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchBioData = async () => {
       setIsLoading(true);
@@ -67,7 +66,6 @@ const BiographySection = () => {
       const timeline = document.getElementById('timeline');
       if (timeline) {
         const items = timeline.querySelectorAll('.timeline-item');
-        
         items.forEach((item, index) => {
           const rect = item.getBoundingClientRect();
           if (rect.top >= 0 && rect.top <= window.innerHeight * 0.6) {
@@ -81,19 +79,20 @@ const BiographySection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fallback data if database is empty
-  const fallbackBioContent = {
+  // Fallback data in case the database returns empty results
+  const fallbackBioContent: BioContent = {
     id: '1',
     title: "Multi-talented Fashion Icon",
-    content: "Felix Oloo is a Kenyan-born international model who has quickly risen to prominence in the fashion industry. Known for his striking features and commanding runway presence, Felix has become a favorite for designers seeking to make a bold statement with their collections.\n\nFrom modeling and judging to organizing prestigious events, Felix has carved out a reputable name in Kenya's fashion and pageant scene, blending elegance with leadership. His ability to embody diverse characters and aesthetics has made him versatile across editorial, campaign, and runway projects."
+    content:
+      "A seasoned fashion model, runway instructor, and event organizer with 9+ years of experience. General Manager of Iconic Dash Modeling Academy and Director of Endeleza Youth Initiative. Expertise in pageantry, catwalk training, and high-profile event production."
   };
   
-  const fallbackMilestones = [
+  const fallbackMilestones: TimelineItem[] = [
     {
       id: '1',
       year: '2023',
       title: 'Major Runway Shows',
-      description: 'Walked for top designers at Nairobi Fashion Week and East African Fashion Summit, establishing presence in regional haute couture.',
+      description: 'Walked for top designers at Nairobi Fashion Week and East African Fashion Summit, establishing a presence in regional haute couture.',
       image_url: '/lovable-uploads/dd5de1ca-c0ec-42fb-b873-60644077c079.png'
     },
     {
@@ -105,66 +104,57 @@ const BiographySection = () => {
     }
   ];
 
+  const bio = bioContent || fallbackBioContent;
+  const timeline = milestones.length > 0 ? milestones : fallbackMilestones;
+
   return (
-    <section id="bio" className="py-20 relative">
+    <section id="biography" className="py-20 bg-fashion-midnight text-fashion-champagne">
       <div className="luxury-container">
-        <h2 className="section-title mb-16">Mr Oloo Biography</h2>
-        
-        {isLoading ? (
-          <div className="flex justify-center items-center py-10">
-            <div className="w-8 h-8 border-2 border-fashion-gold rounded-full border-t-transparent animate-spin"></div>
+        <h2 className="section-title text-4xl font-extrabold tracking-tight text-center mb-10">
+          {bio.title}
+        </h2>
+        <div className="max-w-4xl mx-auto space-y-8 text-lg leading-relaxed">
+          <p>{bio.content}</p>
+          <div>
+            <h3 className="text-2xl font-bold mb-4">Highlights</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li>Trained models for fashion shows, pageants, and commercials.</li>
+              <li>
+                Judged prestigious events: Mr. &amp; Miss Heritage Kenya, Beauty of Africa International Pageant, Mr. Nairobi County.
+              </li>
+              <li>Entrepreneur with ventures in poultry and sugarcane farming.</li>
+            </ul>
           </div>
-        ) : (
-          <div className="flex flex-col lg:flex-row gap-12">
-            {/* Bio text */}
-            <div className="lg:w-1/3">
-              <h3 className="text-2xl font-serif text-fashion-gold mb-6">
-                {(bioContent || fallbackBioContent).title}
-              </h3>
-              {(bioContent || fallbackBioContent).content.split('\n\n').map((paragraph, index) => (
-                <p key={index} className="text-fashion-champagne/80 mb-6">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-            
-            {/* Timeline - Horizontal layout */}
-            <div className="lg:w-2/3">
-              <h3 className="text-2xl font-serif text-fashion-gold mb-6">Career Milestones</h3>
-              <div id="timeline" className="space-y-8">
-                {(milestones.length > 0 ? milestones : fallbackMilestones).map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    className={`timeline-item flex flex-col md:flex-row gap-4 p-4 rounded-lg transition-opacity duration-300 bg-black/20 backdrop-blur-sm border border-fashion-gold/10 ${activeIndex === index ? 'opacity-100' : 'opacity-70'}`}
-                  >
-                    {item.image_url && (
-                      <div className="md:w-1/3">
-                        <img 
-                          src={item.image_url} 
-                          alt={item.title} 
-                          className="w-full h-32 md:h-40 lg:h-48 object-cover rounded-lg" 
-                        />
-                      </div>
-                    )}
-                    
-                    <div className={`${item.image_url ? 'md:w-2/3' : 'w-full'}`}>
-                      <div className="mb-2 flex items-center">
-                        <span className="text-fashion-gold font-serif text-xl mr-3">{item.year}</span>
-                        <h4 className="text-fashion-champagne text-lg">{item.title}</h4>
-                      </div>
-                      <p className="text-fashion-champagne/70">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
+        </div>
+        {/* Timeline Section */}
+        <div id="timeline" className="mt-16">
+          <h3 className="text-3xl font-bold mb-8 text-center">Milestones</h3>
+          <div className="space-y-8">
+            {timeline.map((item, index) => (
+              <div
+                key={item.id}
+                className={`timeline-item p-6 rounded-lg shadow-lg bg-gray-800 flex flex-col md:flex-row items-center transition-all duration-300 ${
+                  activeIndex === index ? 'ring-4 ring-fashion-gold' : ''
+                }`}
+              >
+                {item.image_url && (
+                  <img
+                    src={item.image_url}
+                    alt={item.title}
+                    className="w-24 h-24 object-cover rounded-full mr-6 mb-4 md:mb-0"
+                  />
+                )}
+                <div>
+                  <h4 className="text-2xl font-semibold">
+                    {item.year} - {item.title}
+                  </h4>
+                  <p className="mt-2 text-base">{item.description}</p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
-      
-      {/* Decorative elements */}
-      <div className="absolute right-0 bottom-0 w-32 h-32 border-r-2 border-b-2 border-fashion-gold/20 -z-10"></div>
-      <div className="absolute left-0 top-1/2 w-32 h-32 border-l-2 border-t-2 border-fashion-gold/20 -z-10"></div>
     </section>
   );
 };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { UserPlus, Trash2, Mail, Phone, Users, CheckCircle, XCircle, Clock, BadgeCheck, Badge } from 'lucide-react';
@@ -318,10 +317,10 @@ const AdminVolunteers = () => {
           </div>
           
           <Dialog open={!!selectedVolunteer} onOpenChange={(open) => !open && setSelectedVolunteer(null)}>
-            <DialogContent className="bg-black/80 border-fashion-gold/30 text-fashion-champagne max-w-xl">
+            <DialogContent className="bg-white border border-gray-300 text-gray-900 max-w-xl">
               <DialogHeader>
-                <DialogTitle className="text-xl font-serif text-fashion-gold">Volunteer Details</DialogTitle>
-                <DialogDescription className="text-fashion-champagne/70">
+                <DialogTitle className="text-xl font-serif text-gray-900">Volunteer Details</DialogTitle>
+                <DialogDescription className="text-gray-700">
                   Complete information about {selectedVolunteer?.name}
                 </DialogDescription>
               </DialogHeader>
@@ -330,19 +329,12 @@ const AdminVolunteers = () => {
                 <div className="space-y-4 mt-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <h4 className="text-sm text-fashion-champagne/60 mb-1">Full Name</h4>
-                      <p className="text-fashion-champagne">{selectedVolunteer.name}</p>
+                      <h4 className="text-sm text-gray-700 mb-1">Full Name</h4>
+                      <p className="text-gray-900">{selectedVolunteer.name}</p>
                     </div>
                     <div>
-                      <h4 className="text-sm text-fashion-champagne/60 mb-1">Status</h4>
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
-                        selectedVolunteer.status === 'approved' ? 'bg-green-500/10 text-green-400' : 
-                        selectedVolunteer.status === 'rejected' ? 'bg-red-500/10 text-red-400' : 
-                        'bg-amber-500/10 text-amber-400'
-                      }`}>
-                        {selectedVolunteer.status === 'approved' ? <CheckCircle size={12} className="mr-1" /> : 
-                         selectedVolunteer.status === 'rejected' ? <XCircle size={12} className="mr-1" /> : 
-                         <Clock size={12} className="mr-1" />}
+                      <h4 className="text-sm text-gray-700 mb-1">Status</h4>
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-200 text-gray-800">
                         {selectedVolunteer.status?.charAt(0).toUpperCase() + selectedVolunteer.status?.slice(1) || 'Pending'}
                       </span>
                     </div>
@@ -350,56 +342,56 @@ const AdminVolunteers = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <h4 className="text-sm text-fashion-champagne/60 mb-1">Email</h4>
-                      <p className="text-fashion-champagne">{selectedVolunteer.email}</p>
+                      <h4 className="text-sm text-gray-700 mb-1">Email</h4>
+                      <p className="text-gray-900">{selectedVolunteer.email}</p>
                     </div>
                     <div>
-                      <h4 className="text-sm text-fashion-champagne/60 mb-1">Phone</h4>
-                      <p className="text-fashion-champagne">{selectedVolunteer.phone || 'Not provided'}</p>
+                      <h4 className="text-sm text-gray-700 mb-1">Phone</h4>
+                      <p className="text-gray-900">{selectedVolunteer.phone || 'Not provided'}</p>
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-fashion-champagne/60 mb-1">Project</h4>
-                    <p className="text-fashion-champagne">{selectedVolunteer.project_title || 'None assigned'}</p>
+                    <h4 className="text-sm text-gray-700 mb-1">Project</h4>
+                    <p className="text-gray-900">{selectedVolunteer.project_title || 'None assigned'}</p>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-fashion-champagne/60 mb-1">Availability</h4>
+                    <h4 className="text-sm text-gray-700 mb-1">Availability</h4>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {selectedVolunteer.availability?.map((time, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-black/40 text-fashion-champagne/80 text-xs rounded-full">
+                        <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-800 text-xs rounded-full">
                           {time}
                         </span>
-                      )) || <span className="text-fashion-champagne/60">Not specified</span>}
+                      )) || <span className="text-gray-700">Not specified</span>}
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-fashion-champagne/60 mb-1">Skills</h4>
+                    <h4 className="text-sm text-gray-700 mb-1">Skills</h4>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {selectedVolunteer.skills?.map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-fashion-gold/10 text-fashion-gold/80 text-xs rounded-full flex items-center">
-                          <BadgeCheck size={12} className="mr-1" /> {skill}
+                        <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-800 text-xs rounded-full flex items-center">
+                          {skill}
                         </span>
-                      )) || <span className="text-fashion-champagne/60">No skills specified</span>}
+                      )) || <span className="text-gray-700">No skills specified</span>}
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-fashion-champagne/60 mb-1">Interests</h4>
+                    <h4 className="text-sm text-gray-700 mb-1">Interests</h4>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {selectedVolunteer.interests?.map((interest, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-fashion-gold/5 text-fashion-champagne/80 text-xs rounded-full flex items-center">
-                          <Badge size={12} className="mr-1" /> {interest}
+                        <span key={i} className="px-2 py-0.5 bg-gray-50 text-gray-800 text-xs rounded-full flex items-center">
+                          {interest}
                         </span>
-                      )) || <span className="text-fashion-champagne/60">No interests specified</span>}
+                      )) || <span className="text-gray-700">No interests specified</span>}
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-fashion-champagne/60 mb-1">Joined</h4>
-                    <p className="text-fashion-champagne">
+                    <h4 className="text-sm text-gray-700 mb-1">Joined</h4>
+                    <p className="text-gray-900">
                       {new Date(selectedVolunteer.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -418,17 +410,15 @@ const AdminVolunteers = () => {
                     <Button 
                       variant="outline" 
                       onClick={() => updateVolunteerStatus(selectedVolunteer.id, 'approved')}
-                      className="border-green-500/30 text-green-400 hover:text-green-300 hover:bg-green-950/20"
+                      className="border-green-300 text-green-600 hover:text-green-500 hover:bg-green-100"
                     >
-                      <CheckCircle size={16} className="mr-2" /> 
                       Approve
                     </Button>
                     <Button 
                       variant="outline" 
                       onClick={() => updateVolunteerStatus(selectedVolunteer.id, 'rejected')}
-                      className="border-red-500/30 text-red-400 hover:text-red-300 hover:bg-red-950/20"
+                      className="border-red-300 text-red-600 hover:text-red-500 hover:bg-red-100"
                     >
-                      <XCircle size={16} className="mr-2" /> 
                       Reject
                     </Button>
                   </div>
@@ -439,7 +429,6 @@ const AdminVolunteers = () => {
                     variant="outline" 
                     onClick={() => window.open(`mailto:${selectedVolunteer?.email}`)}
                   >
-                    <Mail size={16} className="mr-2" /> 
                     Email
                   </Button>
                   <DialogClose asChild>

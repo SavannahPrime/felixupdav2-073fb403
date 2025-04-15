@@ -1,10 +1,10 @@
-
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Map } from 'lucide-react';
 import SocialMediaDock from '../components/SocialMediaDock';
+import { toast } from 'sonner';
 
 type Event = {
   id: string;
@@ -13,48 +13,64 @@ type Event = {
   location: string;
   type: string;
   description: string;
+  image_url: string; // Added image_url property
 };
 
 const Events = () => {
-  const [events] = useState<Event[]>([
-    {
-      id: "1",
-      title: "Mr. Nairobi County Pageant",
-      date: "June 15-22, 2025",
-      location: "Nairobi, Kenya",
-      type: "judging",
-      description: "Serving as lead judge for Mr. Nairobi County pageant, bringing industry expertise to contestant evaluation."
-    },
-    {
-      id: "2",
-      title: "Fashion for Change Gala",
-      date: "April 10, 2025",
-      location: "Mombasa, Kenya",
-      type: "organization",
-      description: "Leading the organization of the annual Fashion for Change charity gala supporting education initiatives."
-    },
-    {
-      id: "3",
-      title: "Mr. & Miss Heritage",
-      date: "September 5-12, 2025",
-      location: "Kisumu, Kenya",
-      type: "organization",
-      description: "Organizing and producing the prestigious Mr. & Miss Heritage pageant celebrating Kenyan culture."
-    },
-    {
-      id: "4",
-      title: "Youth Mentorship Workshop",
-      date: "May 28, 2025",
-      location: "Nairobi, Kenya",
-      type: "appearance",
-      description: "Special guest appearance at youth mentorship workshop for aspiring models and fashion professionals."
-    }
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+
+        // Simulate fetching events from Admin's mock data
+        const mockEvents: Event[] = [
+          {
+            id: '1',
+            title: 'Fashion Show 2025',
+            date: '2025-06-15',
+            location: 'Nairobi National Theatre',
+            type: 'judging',
+            description: 'Annual charity fashion show featuring local designers and models.',
+            image_url: '/lovable-uploads/8e031a32-a817-4e19-b4fa-43bd23721f2e.png',
+          },
+          {
+            id: '2',
+            title: 'Youth Leadership Workshop',
+            date: '2025-05-20',
+            location: 'Endeleza Center, Kisumu',
+            type: 'organization',
+            description: 'Workshop for young leaders focusing on personal development and leadership skills.',
+            image_url: '/lovable-uploads/4d25893c-e0e0-4cee-85f3-3790d4b76275.png',
+          },
+          {
+            id: '3',
+            title: 'Community Clean-up Day',
+            date: '2025-04-30',
+            location: 'Lake Victoria Shores',
+            type: 'appearance',
+            description: 'Join us for a day of environmental conservation and community building.',
+            image_url: '/lovable-uploads/75d2a611-491d-48fa-8f51-d4aac3707f31.png',
+          },
+        ];
+
+        setEvents(mockEvents);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        toast.error('Failed to load events');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   useEffect(() => {
     // Set page title
     document.title = "Felix Oloo - Upcoming Events";
-    
     window.scrollTo(0, 0);
   }, []);
 
@@ -76,9 +92,13 @@ const Events = () => {
             
             <TabsContent value="all" className="mt-8">
               <div className="space-y-8">
-                {events.map(event => (
-                  <EventCard key={event.id} event={event} />
-                ))}
+                {loading ? (
+                  <p>Loading events...</p>
+                ) : (
+                  events.map(event => (
+                    <EventCard key={event.id} event={event} />
+                  ))
+                )}
               </div>
             </TabsContent>
             
@@ -117,6 +137,16 @@ const EventCard = ({ event }: { event: Event }) => {
   return (
     <div className="bg-fashion-midnight/40 backdrop-blur-md border border-fashion-gold/20 rounded-md overflow-hidden hover:border-fashion-gold/50 transition-all duration-300">
       <div className="flex flex-col md:flex-row">
+        {/* Event Image */}
+        <div className="md:w-1/4">
+          <img 
+            src={event.image_url} 
+            alt={event.title} 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
+        {/* Event Details */}
         <div className="p-6 md:w-3/4">
           <div className="flex items-center mb-4">
             <span className={`
@@ -142,11 +172,6 @@ const EventCard = ({ event }: { event: Event }) => {
           </div>
           
           <p className="text-fashion-champagne/70">{event.description}</p>
-        </div>
-        
-        <div className="bg-gradient-to-r from-fashion-midnight/0 to-fashion-gold/10 p-6 flex flex-col justify-between items-end md:w-1/4">
-          <SocialMediaDock className="mb-4" />
-          <button className="btn-luxury mt-auto">Details</button>
         </div>
       </div>
     </div>

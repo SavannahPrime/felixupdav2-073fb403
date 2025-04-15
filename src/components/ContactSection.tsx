@@ -1,4 +1,3 @@
-
 import { useState, FormEvent } from 'react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -55,18 +54,17 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-20 relative">
       <div className="luxury-container">
-        <h2 className="section-title mb-6">Contact</h2>
-        <h3 className="text-xl text-fashion-champagne/80 mb-16 max-w-3xl">
-          Reach Out for Collaborations
+        <h2 className="section-title mb-6 text-4xl font-bold text-center">Contact</h2>
+        <h3 className="text-xl text-fashion-champagne/80 mb-16 text-center">
+          Reach Out for Collaborations and Inquiries
         </h3>
         
         <div className="flex flex-col md:flex-row gap-12">
+          {/* Contact Form */}
           <div className="w-full md:w-1/2">
             <h3 className="text-2xl font-serif text-fashion-gold mb-4">Get in Touch</h3>
             <p className="text-fashion-champagne/80 mb-8">
-              For bookings, partnerships, or mentorship inquiries, Felix remains open to working with brands, 
-              creatives, and changemakers. Whether you're interested in runway collaborations, event judging, 
-              or youth initiatives, feel free to reach out.
+              For bookings, partnerships, or mentorship inquiries, Felix remains open to working with brands, creatives, and changemakers.
             </p>
             
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -135,6 +133,7 @@ const ContactSection = () => {
             </form>
           </div>
           
+          {/* Contact Details & Call to Action */}
           <div className="w-full md:w-1/2">
             <div className="h-full flex flex-col justify-between">
               <div>

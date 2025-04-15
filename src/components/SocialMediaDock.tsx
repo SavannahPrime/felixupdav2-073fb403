@@ -1,5 +1,4 @@
-
-import { Instagram, Linkedin, MessageCircle, CircleUser, Facebook, Twitter } from 'lucide-react';
+import { Instagram, MessageCircle, Facebook, Twitter } from 'lucide-react';
 import { useState } from 'react';
 
 interface SocialMediaDockProps {
@@ -13,30 +12,23 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
     { 
       platform: 'instagram', 
       icon: Instagram, 
-      url: 'https://instagram.com/felixoloo',
+      url: 'https://www.instagram.com/felix_oloo_?igsh=MTltaXpqcDNrdHBiZQ==',
       color: 'bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-500',
       label: 'Follow on Instagram'
     },
     { 
       platform: 'facebook', 
       icon: Facebook, 
-      url: 'https://facebook.com/felixoloo',
+      url: 'https://www.facebook.com/young.kelly.52459615?mibextid=rS40aB7S9Ucbxw6v',
       color: 'bg-blue-600',
       label: 'Follow on Facebook'
     },
     { 
       platform: 'twitter', 
       icon: Twitter, 
-      url: 'https://twitter.com/felixoloo',
+      url: 'https://x.com/felix_oloo_?t=mW1lgGQBx5x32Keji0IjAA&s=08',
       color: 'bg-blue-400',
-      label: 'Follow on Twitter'
-    },
-    { 
-      platform: 'linkedin', 
-      icon: Linkedin, 
-      url: 'https://linkedin.com/in/felixoloo',
-      color: 'bg-blue-700',
-      label: 'Connect on LinkedIn'
+      label: 'Follow on X'
     },
     { 
       platform: 'contact', 
@@ -47,7 +39,6 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
     }
   ];
 
-  // Function to play fabric swoosh sound on hover
   const playFabricSound = () => {
     const audio = new Audio('/fabric-swish.mp3');
     audio.volume = 0.2;
@@ -78,7 +69,6 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
           `}>
             <social.icon className="w-5 h-5" />
             
-            {/* Platform label that appears on hover */}
             <span className={`
               absolute left-full ml-2 whitespace-nowrap text-xs px-2 py-1 
               bg-fashion-midnight/80 text-fashion-champagne rounded
@@ -88,29 +78,6 @@ const SocialMediaDock = ({ className }: SocialMediaDockProps) => {
             `}>
               {social.label}
             </span>
-            
-            {/* Platform-specific hover effects */}
-            {hoveredIcon === 'instagram' && (
-              <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-fashion-gold/50"></span>
-            )}
-            {hoveredIcon === 'facebook' && (
-              <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-blue-400/50"></span>
-            )}
-            {hoveredIcon === 'twitter' && (
-              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 h-1">
-                <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '0%' }}></div>
-                <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '25%', animationDelay: '0.1s' }}></div>
-                <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '50%', animationDelay: '0.2s' }}></div>
-                <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '75%', animationDelay: '0.3s' }}></div>
-                <div className="w-1 h-1 bg-fashion-gold rounded-full absolute animate-bounce" style={{ left: '100%', animationDelay: '0.4s' }}></div>
-              </div>
-            )}
-            {hoveredIcon === 'linkedin' && (
-              <span className="absolute inset-0 rounded-full animate-pulse bg-fashion-gold/10"></span>
-            )}
-            {hoveredIcon === 'contact' && (
-              <span className="absolute inset-0 rounded-full animate-pulse ring-2 ring-fashion-gold/60"></span>
-            )}
           </div>
         </a>
       ))}
