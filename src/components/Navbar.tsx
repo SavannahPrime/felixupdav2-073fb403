@@ -18,11 +18,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -50,10 +46,8 @@ const Navbar = () => {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className={`nav-link ${
-                  isActive('/bio') ? 'after:w-full opacity-100' : ''
-                }`}>
-                  <Users size={16} className="mr-1 inline" /> {/* Icon added here */}
+                <NavigationMenuTrigger className={`nav-link ${isActive('/bio') ? 'after:w-full opacity-100' : ''}`}>
+                  <Users size={16} className="mr-1 inline" />
                   About
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -109,7 +103,7 @@ const Navbar = () => {
             <Users size={16} className="mr-1 inline" />
             Volunteer
           </Link>
-         {/* <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
+          {/* <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
           <Link to="/admin/login" className="flex items-center text-fashion-champagne/70 hover:text-fashion-gold transition-colors">
             <LockKeyhole size={16} className="mr-1" />
             <span className="text-sm">Admin</span>
@@ -118,7 +112,7 @@ const Navbar = () => {
         
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-fashion-champagne"
+          className="nav-link md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -166,11 +160,11 @@ const Navbar = () => {
               <Users size={16} className="mr-1 inline" />
               Volunteer
             </Link>
-            <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
+            {/*<Link to="/contact" className={`nav-link ${isActive('/contact') ? 'after:w-full opacity-100' : ''}`}>Contact</Link>
             <Link to="/admin/login" className="flex items-center text-fashion-champagne/70 hover:text-fashion-gold transition-colors px-2 py-1">
               <LockKeyhole size={16} className="mr-1" />
-              <span className="text-sm">Admin</span>
-            </Link>
+              <span className="text-sm">Admin</span> 
+            </Link> */}
           </div>
         </div>
       )}
