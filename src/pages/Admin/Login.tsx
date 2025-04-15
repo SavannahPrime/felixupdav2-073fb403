@@ -105,7 +105,7 @@ const AdminLogin = () => {
           
           <div className="mt-6 text-center">
             <p className="text-sm text-fashion-champagne/60">
-              For demo: use "admin" / "password"
+              ADMIN
             </p>
           </div>
         </div>
