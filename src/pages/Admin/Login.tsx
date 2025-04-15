@@ -18,7 +18,7 @@ const AdminLogin = () => {
     // This is a simplified authentication for demo purposes
     // In a real app, you would connect to a backend service
     setTimeout(() => {
-      if (username === 'admin' && password === 'password') {
+      if (username === 'felix' && password === 'Oloo431') {
         // Store auth in session storage (would use proper JWT in real app)
         sessionStorage.setItem('isAuthenticated', 'true');
         toast.success('Welcome to your admin dashboard');
