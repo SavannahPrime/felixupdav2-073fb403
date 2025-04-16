@@ -83,7 +83,7 @@ const Hero = () => {
           FELIX OLOO
         </h1>
         <h2 className="text-xl md:text-2xl font-sans text-fashion-champagne mb-4 tracking-wide">
-          Fashion Model • Runway Instructor • Event Organizer • Judge
+          Commercial Model • Runway Instructor • Fashion Model • Event Judge
         </h2>
 
         {/* Buttons */}

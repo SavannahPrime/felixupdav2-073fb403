@@ -14,7 +14,7 @@ const AboutRoles = () => {
       He has successfully organized and produced renowned events such as Mr. & Miss Heritage International Kenya, Mr. Nairobi County, 
       and Beauty of Africa International Pageant Kenya. With expertise in event planning, logistics, and execution, Felix ensures seamless 
       and impactful productions that elevate industry standards.`,
-      image: "/images/event_organizer.jpg",
+      image: "/public/lovable-uploads/about.jpg",
     },
     judge: {
       title: "Event Judge",
@@ -22,14 +22,14 @@ const AboutRoles = () => {
       and presentation evaluation. He has judged prestigious competitions, including Mr. & Miss Heritage International Kenya, Mr. Nairobi County, 
       and Beauty of Africa International Pageant Kenya. His expertise ensures fair, insightful, and professional assessments, contributing to the 
       growth and credibility of the industry.`,
-      image: "/images/event_judge.jpg",
+      image: "/public/lovable-uploads/judge.jpg",
     },
     instructor: {
       title: "Runway Instructor",
       description: `Felix Oloo is a runway instructor with expertise in catwalk training, posture, and stage presence. He has trained numerous 
       models, preparing them for fashion shows, pageants, and commercial modeling. His instruction focuses on confidence, elegance, and technical 
       precision, ensuring models excel in the competitive fashion industry.`,
-      image: "/images/runway_instructor.jpg",
+      image: "/public/lovable-uploads/Runway.jpg",
     },
   };
 

@@ -27,37 +27,40 @@ import AboutRoles from "./pages/AboutRoles"; // Import the AboutRoles component
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <Toaster />
-    <Sonner />
-    <HashRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/bio" element={<Bio />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/endeleza" element={<Endeleza />} />
-        <Route path="/volunteer" element={<Volunteer />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/portfolio" element={<AdminPortfolio />} />
-        <Route path="/admin/bio" element={<AdminBio />} />
-        <Route path="/admin/blog" element={<AdminBlog />} />
-        <Route path="/admin/projects" element={<AdminProjects />} />
-        <Route path="/admin/events" element={<AdminEvents />} />
-        <Route path="/admin/volunteers" element={<AdminVolunteers />} />
-        <Route path="/admin/messages" element={<AdminMessages />} />
-        <Route path="/admin/settings" element={<AdminSettings />} />
-        <Route path="/about-roles" element={<AboutRoles />} />
-        <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
-      </Routes>
-    </HashRouter>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Toaster />
+      <Sonner />
+      <HashRouter>
+        <Navbar /> {/* Always render the Navbar */}
+
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/bio" element={<Bio />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/endeleza" element={<Endeleza />} />
+          <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/portfolio" element={<AdminPortfolio />} />
+          <Route path="/admin/bio" element={<AdminBio />} />
+          <Route path="/admin/blog" element={<AdminBlog />} />
+          <Route path="/admin/projects" element={<AdminProjects />} />
+          <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/volunteers" element={<AdminVolunteers />} />
+          <Route path="/admin/messages" element={<AdminMessages />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/about-roles" element={<AboutRoles />} />
+          <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
+        </Routes>
+      </HashRouter>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

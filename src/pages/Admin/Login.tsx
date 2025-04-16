@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
+import CryptoJS from 'crypto-js'; // Import crypto-js for hashing
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
@@ -11,20 +11,29 @@ const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Pre-hashed password for "Oloo431" using CryptoJS
+  const hashedPassword = CryptoJS.SHA256('Oloo431').toString();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // This is a simplified authentication for demo purposes
-    // In a real app, you would connect to a backend service
+
     setTimeout(() => {
-      if (username === 'felix' && password === 'Oloo431') {
-        // Store auth in session storage (would use proper JWT in real app)
-        sessionStorage.setItem('isAuthenticated', 'true');
-        toast.success('Welcome to your admin dashboard');
-        navigate('/admin/dashboard');
+      if (username === 'felix') {
+        // Hash the entered password and compare it with the stored hash
+        const enteredPasswordHash = CryptoJS.SHA256(password).toString();
+        console.log('Entered Password Hash:', enteredPasswordHash);
+        console.log('Stored Hashed Password:', hashedPassword);
+
+        if (enteredPasswordHash === hashedPassword) {
+          sessionStorage.setItem('isAuthenticated', 'true');
+          toast.success('Welcome to your admin dashboard');
+          navigate('/admin/dashboard');
+        } else {
+          toast.error('Invalid password');
+        }
       } else {
-        toast.error('Invalid credentials');
+        toast.error('Invalid username');
       }
       setIsLoading(false);
     }, 1000);
@@ -37,11 +46,12 @@ const AdminLogin = () => {
           <h1 className="font-serif text-4xl text-fashion-gold mb-2">FELIX OLOO</h1>
           <p className="text-fashion-champagne/60">Admin Portal</p>
         </div>
-        
+
         <div className="bg-black/30 backdrop-blur-lg rounded-lg border border-fashion-gold/20 p-8 shadow-xl">
           <h2 className="text-2xl font-serif text-fashion-champagne mb-6">Secure Login</h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Username Field */}
             <div className="space-y-2">
               <label className="text-sm text-fashion-champagne/80">Username</label>
               <div className="relative">
@@ -58,7 +68,8 @@ const AdminLogin = () => {
                 />
               </div>
             </div>
-            
+
+            {/* Password Field */}
             <div className="space-y-2">
               <label className="text-sm text-fashion-champagne/80">Password</label>
               <div className="relative">
@@ -66,7 +77,7 @@ const AdminLogin = () => {
                   <Lock size={16} className="text-fashion-gold/70" />
                 </div>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-black/40 border border-fashion-gold/30 rounded pl-10 pr-10 py-2 text-fashion-champagne focus:outline-none focus:ring-1 focus:ring-fashion-gold/50"
@@ -86,7 +97,8 @@ const AdminLogin = () => {
                 </button>
               </div>
             </div>
-            
+
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -102,14 +114,12 @@ const AdminLogin = () => {
               )}
             </button>
           </form>
-          
+
           <div className="mt-6 text-center">
-            <p className="text-sm text-fashion-champagne/60">
-              ADMIN
-            </p>
+            <p className="text-sm text-fashion-champagne/60">ADMIN</p>
           </div>
         </div>
-        
+
         <div className="mt-8 text-center">
           <a href="/" className="text-fashion-gold/70 hover:text-fashion-gold transition-colors">
             ← Return to website
