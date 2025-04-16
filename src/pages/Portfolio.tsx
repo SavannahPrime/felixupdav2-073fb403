@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import PortfolioGrid from '../components/PortfolioGrid';
@@ -22,8 +21,12 @@ const Portfolio = () => {
             Runway Model, Event Organiser & Event Judge 
           </h2>
           <p className="text-fashion-champagne/70 mb-16 max-w-3xl">
-            Felix has modeled for major fashion runways, ad campaigns, and high-profile pageants, 
-            known for his versatility and strong presence on stage and in front of the camera.
+            Felix Oloo is a seasoned fashion and runway model, model trainer, and event organizer 
+            with expertise in pageantry, catwalk coaching, and event production. As the General Manager 
+            of Iconic Dash Modeling Academy, he has trained and mentored numerous models. He is also the 
+            Director of Endeleza Youth Initiative, supporting educational projects. Beyond fashion, he is 
+            an entrepreneur with investments in poultry and sugarcane farming. Felix is a respected event 
+            judge and business strategist, dedicated to excellence in the modeling and entertainment industries.
           </p>
           <PortfolioGrid />
         </div>

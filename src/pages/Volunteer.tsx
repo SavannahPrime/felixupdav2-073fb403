@@ -99,7 +99,7 @@ const Volunteer = () => {
             <h1 className="section-title mb-6">
               Volunteer Registration
               <div className="absolute -top-3 -right-3 text-xs text-fashion-gold border border-fashion-gold/30 px-2 py-1 rotate-6">
-                ENDELEZA YOUTH INITIATIVE
+               
               </div>
             </h1>
           </div>

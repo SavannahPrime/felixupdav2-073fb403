@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import SocialMediaDock from './SocialMediaDock';
 import TooltipWrapper from './ui/TooltipWrapper';
@@ -14,10 +15,8 @@ const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isImgHovered, setIsImgHovered] = useState(false);
-  const [isEliteHovered, setIsEliteHovered] = useState(false);
-  const [isFordHovered, setIsFordHovered] = useState(false);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -25,7 +24,7 @@ const Hero = () => {
         playSwishSound();
       }
     };
-    
+
     const handleMouseMove = (e: MouseEvent) => {
       if (spotlightRef.current) {
         spotlightRef.current.style.opacity = '0.4';
@@ -33,53 +32,27 @@ const Hero = () => {
         spotlightRef.current.style.top = `${e.clientY}px`;
       }
     };
-    
+
     const handleMouseLeave = () => {
       if (spotlightRef.current) {
         spotlightRef.current.style.opacity = '0';
-      }
-    };
-    
-    const handleSpacebar = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && containerRef.current) {
-        e.preventDefault();
-        containerRef.current.classList.add('animate-spotlight');
-        setTimeout(() => {
-          if (containerRef.current) {
-            containerRef.current.classList.remove('animate-spotlight');
-          }
-        }, 2000);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('keydown', handleSpacebar);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
-      window.removeEventListener('keydown', handleSpacebar);
     };
   }, []);
 
-  // Nebula background animation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (containerRef.current) {
-        const nebulaOverlay = containerRef.current.querySelector('.nebula-overlay') as HTMLElement;
-        if (nebulaOverlay) {
-          const randomX = Math.random() * 10 - 5;
-          const randomY = Math.random() * 10 - 5;
-          nebulaOverlay.style.transform = `translate(${randomX}px, ${randomY}px)`;
-        }
-      }
-    }, 3000);
-    
-    return () => clearInterval(interval);
-  }, []);
+  const handleNavigate = (role: string) => {
+    navigate(`/about-roles?role=${role}`);
+  };
 
   return (
     <div ref={containerRef} className="relative h-screen overflow-hidden">
@@ -112,40 +85,52 @@ const Hero = () => {
         <h2 className="text-xl md:text-2xl font-sans text-fashion-champagne mb-4 tracking-wide">
           Fashion Model • Runway Instructor • Event Organizer • Judge
         </h2>
-        
-        {/* Tagline */}
-        <p className="text-lg md:text-xl font-sans text-fashion-champagne/80 mb-6 tracking-wider"
-          style={{ transform: `translateY(${-scrollY * 0.1}px)` }}
-        >
-          Seasoned Fashion Expert | Mentor | Youth Empowerment Advocate
-        </p>
-        
-        {/* Key Achievement */}
-        <p className="text-sm md:text-base font-sans text-fashion-gold uppercase tracking-widest mb-12">
-          Mr. World Kenya Finalist 2024
-        </p>
-        
-        {/* Decorative Divider */}
-        <div className="relative flex justify-center mb-12 overflow-hidden">
-          <div className="h-[2px] w-24 bg-fashion-gold animate-reveal" style={{ animationDelay: '0.3s' }}></div>
+
+        {/* Buttons */}
+        <div className="flex justify-center gap-6 mb-12">
+          <button
+            onClick={() => handleNavigate("organizer")}
+            className="px-6 py-3 rounded border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/80 hover:text-black transition"
+          >
+            Event Organizer
+          </button>
+          <button
+            onClick={() => handleNavigate("judge")}
+            className="px-6 py-3 rounded border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/80 hover:text-black transition"
+          >
+            Event Judge
+          </button>
+          <button
+            onClick={() => handleNavigate("instructor")}
+            className="px-6 py-3 rounded border border-fashion-gold text-fashion-gold hover:bg-fashion-gold/80 hover:text-black transition"
+          >
+            Runway Instructor
+          </button>
         </div>
+      </div>
         
-        {/* Social Media Accounts with hover effects */}
-        <TooltipWrapper>
-          <SocialMediaDock className="flex-row space-x-6" />
-        </TooltipWrapper>
+      {/* Tagline 
+      <p className="text-lg md:text-xl font-sans text-fashion-champagne/80 mb-6 tracking-wider"
+        style={{ transform: `translateY(${-scrollY * 0.1}px)` }}
+      >
+        Seasoned Fashion Expert | Mentor | Youth Empowerment Advocate
+      </p> */}
+      
+      {/* Key Achievement */}
+      <p className="text-sm md:text-base font-sans text-fashion-gold uppercase tracking-widest mb-12">
+        Mr. World Kenya Finalist 2024
+      </p>
+      
+      {/* Decorative Divider */}
+      <div className="relative flex justify-center mb-12 overflow-hidden">
+        <div className="h-[2px] w-24 bg-fashion-gold animate-reveal" style={{ animationDelay: '0.3s' }}></div>
       </div>
       
-      {/* Social Media Dock (Bottom Right) */}
-      <div className="absolute bottom-32 right-8 md:right-12 animate-fade-in" style={{ animationDelay: '1.5s' }}>
-        <SocialMediaDock className="flex-col space-y-4" />
-      </div>
-      
-      {/* Additional Call-to-Action */}
-      <div className="absolute bottom-12 left-0 right-0 flex justify-center animate-fade-in" style={{ animationDelay: '1.5s' }}>
-        <p className="text-fashion-champagne/60 text-sm uppercase tracking-wider">Press spacebar for runway walk</p>
-      </div>
-      
+      {/* Social Media Accounts with hover effects */}
+      <TooltipWrapper>
+        <SocialMediaDock className="flex-row space-x-6" />
+      </TooltipWrapper>
+
       {/* Cursor Spotlight Effect */}
       <div 
         ref={spotlightRef} 

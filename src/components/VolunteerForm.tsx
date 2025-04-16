@@ -11,78 +11,71 @@ const VolunteerForm = () => {
   const [interests, setInterests] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Predefined options
   const skillOptions = ['Design', 'Photography', 'Event Planning', 'Teaching', 'Marketing', 'Social Media', 'Writing', 'Administration'];
   const interestOptions = ['Fashion', 'Youth Mentorship', 'Community Work', 'Education', 'Arts & Culture', 'Media'];
 
   const handleAvailabilityChange = (option: string) => {
-    setAvailability(prev =>
+    setAvailability((prev) =>
       prev.includes(option)
-        ? prev.filter(item => item !== option)
+        ? prev.filter((item) => item !== option)
         : [...prev, option]
     );
   };
 
   const handleSkillChange = (option: string) => {
-    setSkills(prev =>
+    setSkills((prev) =>
       prev.includes(option)
-        ? prev.filter(item => item !== option)
+        ? prev.filter((item) => item !== option)
         : [...prev, option]
     );
   };
 
   const handleInterestChange = (option: string) => {
-    setInterests(prev =>
+    setInterests((prev) =>
       prev.includes(option)
-        ? prev.filter(item => item !== option)
+        ? prev.filter((item) => item !== option)
         : [...prev, option]
     );
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
-    if (!name || !email) {
-      toast.error('Please provide your name and email');
+
+    if (!name.trim() || !email.trim()) {
+      toast.error('Please provide your name and email.');
       return;
     }
-    
-    // Email validation
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error('Please enter a valid email address');
+    if (!emailRegex.test(email.trim())) {
+      toast.error('Please enter a valid email address.');
       return;
     }
-    
-    // Availability validation
+
     if (availability.length === 0) {
-      toast.error('Please select at least one availability option');
+      toast.error('Please select at least one availability option.');
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
-      // Submit to Supabase
-      // Note: Registration is open to anyone and is not limited to existing projects.
       const { error } = await supabase.from('volunteers').insert([
-        { 
-          name, 
-          email, 
-          phone: phone || null, 
+        {
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim() || null,
           availability,
           skills: skills.length > 0 ? skills : null,
           interests: interests.length > 0 ? interests : null,
-          status: 'pending'
-        }
+          status: 'pending',
+        },
       ]);
-      
+
       if (error) throw error;
-      
+
       toast.success('Thank you for volunteering! We will contact you soon.');
-      
-      // Clear the form
+
       setName('');
       setEmail('');
       setPhone('');

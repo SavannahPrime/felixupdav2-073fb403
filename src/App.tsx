@@ -21,8 +21,9 @@ import AdminEvents from "./pages/Admin/Events";
 import AdminVolunteers from "./pages/Admin/Volunteers";
 import AdminMessages from "./pages/Admin/Messages";
 import AdminSettings from "./pages/Admin/Settings";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound"; // Import the NotFound component
 import Navbar from "./components/Navbar"; // Import the Navbar component
+import AboutRoles from "./pages/AboutRoles"; // Import the AboutRoles component
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,8 @@ const App = () => (
         <Route path="/admin/volunteers" element={<AdminVolunteers />} />
         <Route path="/admin/messages" element={<AdminMessages />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/about-roles" element={<AboutRoles />} />
+        <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
       </Routes>
     </BrowserRouter>
   </QueryClientProvider>

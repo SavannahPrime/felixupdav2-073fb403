@@ -40,10 +40,11 @@ const Index = () => {
     <main className="min-h-screen bg-fashion-midnight text-fashion-champagne">
       <Navbar />
       <Hero />
-      <PortfolioGrid />
-      
-      {/* Rate Card Section */}
-      <section id="rate-card" className="py-20 bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg">
+       {/* Biography Section */}
+       <BiographySection />
+       
+       {/* Rate Card Section */}
+       <section id="rate-card" className="py-20 bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg">
         <div className="luxury-container">
           <h2 className="section-title mb-10 text-4xl font-extrabold tracking-tight text-center">
             Professional Rates &amp; Services
@@ -88,8 +89,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Biography Section */}
-      <BiographySection />
+     
+      <PortfolioGrid />
+      
+     
       
       {/* Endeleza Youth Initiative Section */}
       <section id="endeleza-initiative" className="py-20 relative">
