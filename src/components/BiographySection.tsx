@@ -136,7 +136,7 @@ const BiographySection = () => {
         {/* Image and Bio Content */}
         <div className="flex flex-col md:flex-row items-center gap-12">
           <img
-            src="/public/lovable-uploads/IMG-20250328-WA0016.jpg"
+            src="/lovable-uploads/IMG-20250328-WA0016.jpg" // Fixed the image path
             alt="Felix Oloo"
             className="w-full md:w-1/3 rounded-lg shadow-lg"
           />
