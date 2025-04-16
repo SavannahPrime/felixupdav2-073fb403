@@ -142,12 +142,12 @@ const ContactSection = () => {
                 <div className="space-y-8">
                   <div>
                     <p className="text-fashion-gold font-medium">Email</p>
-                    <a href="mailto:info@felix-oloo.com" className="text-fashion-champagne hover:text-fashion-gold transition-colors">info@felix-oloo.com</a>
+                    <a href="mailto:info@felixoloo.com" className="text-fashion-champagne hover:text-fashion-gold transition-colors">info@felix-oloo.com</a>
                   </div>
                   
                   <div>
                     <p className="text-fashion-gold font-medium">Phone</p>
-                    <a href="tel:+254123456789" className="text-fashion-champagne hover:text-fashion-gold transition-colors">+254 123 456 789</a>
+                    <a href="tel:+254741820201" className="text-fashion-champagne hover:text-fashion-gold transition-colors">+254 741 820 201</a>
                   </div>
                   
                   <div>
