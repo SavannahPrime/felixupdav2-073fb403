@@ -153,21 +153,7 @@ const BiographySection = () => {
           </div>
         </div>
 
-        {/* Measurements Section */}
-        <div className="bg-black/20 p-8 rounded-lg shadow-lg">
-          <h3 className="text-3xl font-bold text-center mb-6 text-fashion-gold">Model Measurements</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {measurements.map((measurement, index) => (
-              <div
-                key={index}
-                className="flex justify-between bg-black/10 p-4 rounded-md shadow-sm"
-              >
-                <span className="font-semibold">{measurement.label}:</span>
-                <span>{measurement.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      
 
         {/* Timeline Section */}
         <div id="timeline" className="space-y-8">

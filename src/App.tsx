@@ -24,6 +24,7 @@ import AdminSettings from "./pages/Admin/Settings";
 import NotFound from "./pages/NotFound"; // Import the NotFound component
 import Navbar from "./components/Navbar"; // Import the Navbar component
 import AboutRoles from "./pages/AboutRoles"; // Import the AboutRoles component
+import RateCard from "./pages/RateCard"; // Import the RateCard component
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="/admin/messages" element={<AdminMessages />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/about-roles" element={<AboutRoles />} />
+          <Route path="/rate-card" element={<RateCard />} />
           <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
         </Routes>
       </HashRouter>
