@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Calendar, Map } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,13 +29,15 @@ const ProjectsList = () => {
       try {
         setLoading(true);
         const { data, error } = await supabase
-          .from<Project>('projects')
+          .from('projects')
           .select('*')
           .order('created_at', { ascending: false });
+        
         if (error) {
           throw error;
         }
-        setProjects(data || []);
+        
+        setProjects(data as Project[] || []);
       } catch (error) {
         console.error('Error fetching projects:', error);
         toast.error('Failed to load projects');
