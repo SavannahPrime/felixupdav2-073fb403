@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Settings as SettingsIcon, Save, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
-import AdminLayout from '../../components/Admin/AdminLayout';
+import V2AdminLayout from '../../components/Admin/V2AdminLayout';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,11 +50,11 @@ const AdminSettings = () => {
   };
   
   return (
-    <AdminLayout title="Settings" currentPath={location.pathname}>
+    <V2AdminLayout title="Settings" currentPath={location.pathname}>
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-            <h3 className="text-xl font-serif text-fashion-champagne mb-4">General Settings</h3>
+          <div className="v2-card rounded-lg p-6">
+            <h3 className="text-xl font-poppins text-v2-cream mb-4">General Settings</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4">
                 <div>
@@ -63,7 +63,7 @@ const AdminSettings = () => {
                     id="siteTitle"
                     value={settings.siteTitle}
                     onChange={(e) => handleChange('siteTitle', e.target.value)}
-                    className="bg-black/40 border-fashion-gold/30 text-fashion-champagne mt-1"
+                    className="bg-white/5 border-white/10 text-v2-cream mt-1"
                   />
                 </div>
                 
@@ -74,70 +74,74 @@ const AdminSettings = () => {
                     type="email"
                     value={settings.contactEmail}
                     onChange={(e) => handleChange('contactEmail', e.target.value)}
-                    className="bg-black/40 border-fashion-gold/30 text-fashion-champagne mt-1"
+                    className="bg-white/5 border-white/10 text-v2-cream mt-1"
                   />
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-            <h3 className="text-xl font-serif text-fashion-champagne mb-4">Feature Settings</h3>
+          <div className="v2-card rounded-lg p-6">
+            <h3 className="text-xl font-poppins text-v2-cream mb-4">Feature Settings</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="enableBlog" className="text-fashion-champagne">Enable Blog</Label>
-                  <p className="text-sm text-fashion-champagne/60">Show blog section on the website</p>
+                  <Label htmlFor="enableBlog" className="text-v2-cream">Enable Blog</Label>
+                  <p className="text-sm text-v2-lavender/80">Show blog section on the website</p>
                 </div>
                 <Switch
                   id="enableBlog"
                   checked={settings.enableBlog}
                   onCheckedChange={(checked) => handleChange('enableBlog', checked)}
+                  className="data-[state=checked]:bg-v2-teal"
                 />
               </div>
               
-              <Separator className="border-fashion-gold/10" />
+              <Separator className="border-white/10" />
               
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="enableVolunteers" className="text-fashion-champagne">Enable Volunteers</Label>
-                  <p className="text-sm text-fashion-champagne/60">Allow visitors to sign up as volunteers</p>
+                  <Label htmlFor="enableVolunteers" className="text-v2-cream">Enable Volunteers</Label>
+                  <p className="text-sm text-v2-lavender/80">Allow visitors to sign up as volunteers</p>
                 </div>
                 <Switch
                   id="enableVolunteers"
                   checked={settings.enableVolunteers}
                   onCheckedChange={(checked) => handleChange('enableVolunteers', checked)}
+                  className="data-[state=checked]:bg-v2-teal"
                 />
               </div>
               
-              <Separator className="border-fashion-gold/10" />
+              <Separator className="border-white/10" />
               
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="autoApproveComments" className="text-fashion-champagne">Auto-approve Comments</Label>
-                  <p className="text-sm text-fashion-champagne/60">Automatically approve blog comments</p>
+                  <Label htmlFor="autoApproveComments" className="text-v2-cream">Auto-approve Comments</Label>
+                  <p className="text-sm text-v2-lavender/80">Automatically approve blog comments</p>
                 </div>
                 <Switch
                   id="autoApproveComments"
                   checked={settings.autoApproveComments}
                   onCheckedChange={(checked) => handleChange('autoApproveComments', checked)}
+                  className="data-[state=checked]:bg-v2-teal"
                 />
               </div>
             </div>
           </div>
           
-          <div className="bg-black/30 backdrop-blur-md border border-fashion-gold/20 rounded-lg p-6">
-            <h3 className="text-xl font-serif text-fashion-champagne mb-4">Advanced Settings</h3>
+          <div className="v2-card rounded-lg p-6">
+            <h3 className="text-xl font-poppins text-v2-cream mb-4">Advanced Settings</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="maintenance" className="text-fashion-champagne">Maintenance Mode</Label>
-                  <p className="text-sm text-fashion-champagne/60">Disable public access to the website</p>
+                  <Label htmlFor="maintenance" className="text-v2-cream">Maintenance Mode</Label>
+                  <p className="text-sm text-v2-lavender/80">Disable public access to the website</p>
                 </div>
                 <Switch
                   id="maintenance"
                   checked={settings.maintenance}
                   onCheckedChange={(checked) => handleChange('maintenance', checked)}
+                  className="data-[state=checked]:bg-v2-teal"
                 />
               </div>
               
@@ -155,12 +159,12 @@ const AdminSettings = () => {
           <div className="flex justify-end">
             <Button
               type="submit"
-              className="btn-luxury flex items-center"
+              className="v2-btn-solid flex items-center"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <div className="h-4 w-4 mr-2 rounded-full border-2 border-fashion-gold border-t-transparent animate-spin"></div>
+                  <div className="h-4 w-4 mr-2 rounded-full border-2 border-v2-navy border-t-transparent animate-spin"></div>
                   Saving...
                 </>
               ) : (
@@ -173,7 +177,7 @@ const AdminSettings = () => {
           </div>
         </form>
       </div>
-    </AdminLayout>
+    </V2AdminLayout>
   );
 };
 
