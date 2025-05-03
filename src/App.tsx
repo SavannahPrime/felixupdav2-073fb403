@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,9 +23,9 @@ import AdminVolunteers from "./pages/Admin/Volunteers";
 import AdminMessages from "./pages/Admin/Messages";
 import AdminSettings from "./pages/Admin/Settings";
 import NotFound from "./pages/NotFound"; // Import the NotFound component
-import Navbar from "./components/Navbar"; // Import the Navbar component
 import AboutRoles from "./pages/AboutRoles"; // Import the AboutRoles component
 import RateCard from "./pages/RateCard"; // Import the RateCard component
+import IndexV2 from "./pages/IndexV2"; // Import the new version 2 index page
 
 const queryClient = new QueryClient();
 
@@ -34,10 +35,9 @@ const App = () => {
       <Toaster />
       <Sonner />
       <HashRouter>
-        <Navbar /> {/* Always render the Navbar */}
-
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/v1" element={<Index />} />
+          <Route path="/" element={<IndexV2 />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/bio" element={<Bio />} />
           <Route path="/events" element={<Events />} />

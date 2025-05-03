@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -53,7 +52,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Fashion model portfolio specific colors with proper opacity support
+        // Version 2 colors - modern palette
+        'v2-navy': '#0A192F',
+        'v2-cream': '#E6F1FF',
+        'v2-teal': '#64FFDA',
+        'v2-lavender': '#8892B0',
+        'v2-coral': '#FF6B6B',
+        
+        // Keep original fashion model colors for compatibility
         'fashion-midnight': '#0D1117',
         'fashion-champagne': '#F6F1E9',
         'fashion-gold': '#D4AF37',
@@ -66,6 +72,8 @@ export default {
         'cosmic-nebula': 'url(/nebula-texture.png)',
         'model-felix': 'url(/lovable-uploads/97f9824b-6c53-49d0-8b3d-6288a3588b6e.png)',
         'model-catwalk': 'url(/lovable-uploads/98b0559a-74a6-4060-b518-09ea4f08b728.png)',
+        'v2-gradient': 'linear-gradient(to right, #0A192F, #233554)',
+        'v2-card': 'linear-gradient(to bottom, rgba(14, 22, 40, 0.5), rgba(10, 25, 47, 0.8))',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -112,6 +120,14 @@ export default {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
         },
+        "slide-up": {
+          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "slide-in": {
+          "0%": { transform: "translateX(-20px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -122,7 +138,14 @@ export default {
         "runway-walk": "runway-walk 3s ease-in-out",
         "fabric-flow": "fabric-flow 8s ease infinite",
         "measuring-tape": "measuring-tape 2s ease-out forwards",
+        "slide-up": "slide-up 0.6s ease-out forwards",
+        "slide-in": "slide-in 0.6s ease-out forwards",
       },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
+        'playfair': ['Playfair Display', 'serif'],
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

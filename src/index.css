@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -92,12 +93,12 @@
   }
 
   body {
-    @apply bg-fashion-midnight text-fashion-champagne font-sans;
+    @apply bg-v2-navy text-v2-cream font-inter;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold;
+    @apply font-poppins font-bold;
   }
   
   .light-mode {
@@ -111,6 +112,7 @@
 }
 
 @layer components {
+  /* V1 Components - Original */
   .luxury-container {
     @apply container mx-auto px-4 md:px-8;
   }
@@ -142,7 +144,6 @@
     @apply transition-all duration-500;
   }
   
-  /* Apply hover effects separately since we can't use group with @apply */
   .group:hover img {
     @apply scale-110 opacity-80;
   }
@@ -152,7 +153,6 @@
            transition-all duration-500 flex flex-col justify-end p-6;
   }
   
-  /* Apply hover effects separately */
   .group:hover .portfolio-overlay {
     @apply opacity-100;
   }
@@ -173,6 +173,75 @@
   .light-mode .btn-luxury {
     @apply border-amber-600 text-amber-700 hover:bg-amber-50;
   }
+
+  /* V2 Components - Modern Design */
+  .v2-container {
+    @apply container mx-auto px-4 md:px-8;
+  }
+  
+  .v2-nav-link {
+    @apply relative px-3 py-2 text-v2-cream opacity-80 hover:opacity-100 transition-all duration-300
+           hover:text-v2-teal;
+  }
+  
+  .v2-section-title {
+    @apply font-poppins text-3xl md:text-4xl lg:text-5xl mb-8 text-v2-cream relative inline-block;
+  }
+  
+  .v2-section-title::after {
+    content: '';
+    @apply absolute -bottom-2 left-0 w-16 h-1 bg-v2-teal rounded-full;
+  }
+  
+  .v2-card {
+    @apply bg-v2-card backdrop-blur-sm rounded-lg border border-white/10 overflow-hidden
+           transition-all duration-300 hover:border-v2-teal/30 hover:shadow-lg hover:shadow-v2-teal/5;
+  }
+  
+  .v2-portfolio-item {
+    @apply relative overflow-hidden cursor-pointer rounded-lg bg-v2-navy/80 
+           transition-all duration-500;
+  }
+  
+  .v2-portfolio-item img {
+    @apply transition-all duration-500 rounded-lg;
+  }
+  
+  .v2-group:hover img {
+    @apply scale-105;
+  }
+  
+  .v2-portfolio-overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-v2-navy/90 to-transparent opacity-0
+           transition-all duration-500 flex flex-col justify-end p-6;
+  }
+  
+  .v2-group:hover .v2-portfolio-overlay {
+    @apply opacity-100;
+  }
+  
+  .v2-timeline-item {
+    @apply relative pl-8 pb-8 border-l border-v2-teal/40 last:border-0;
+  }
+  
+  .v2-timeline-dot {
+    @apply absolute left-0 w-4 h-4 rounded-full bg-v2-teal transform -translate-x-1/2 mt-1.5;
+  }
+  
+  .v2-btn {
+    @apply px-6 py-3 rounded-md bg-transparent border border-v2-teal text-v2-teal 
+           hover:bg-v2-teal/10 transition-all duration-300 font-medium inline-flex 
+           items-center gap-2;
+  }
+
+  .v2-btn-solid {
+    @apply px-6 py-3 rounded-md bg-v2-teal text-v2-navy font-medium hover:bg-v2-teal/90
+           transition-all duration-300 inline-flex items-center gap-2;
+  }
+  
+  .v2-glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg;
+  }
 }
 
 @layer utilities {
@@ -186,6 +255,12 @@
     -webkit-text-fill-color: transparent;
   }
 
+  .teal-gradient {
+    background: linear-gradient(to right, #64FFDA, #76FFEF, #64FFDA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   .perspective-1000 {
     perspective: 1000px;
   }
@@ -193,9 +268,24 @@
   .transform-3d {
     transform-style: preserve-3d;
   }
+
+  /* V2 Utilities */
+  .v2-mask-bottom {
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+  
+  .v2-text-gradient {
+    background: linear-gradient(to right, #64FFDA, #76FFEF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .v2-border-gradient {
+    border-image: linear-gradient(to right, #64FFDA, #8892B0) 1;
+  }
 }
 
-/* Define the spotlight style directly without using Tailwind @apply */
+/* Spotlight effect */
 .spotlight {
   pointer-events: none;
   position: fixed;
@@ -208,4 +298,44 @@
   transform: translate(-50%, -50%);
   z-index: 50;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent);
+}
+
+/* V2 Spotlight effect */
+.v2-spotlight {
+  pointer-events: none;
+  position: fixed;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 9999px;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 300ms;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  background: radial-gradient(circle, rgba(100, 255, 218, 0.15), transparent);
+}
+
+/* V2 Animated background */
+.v2-animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  background-image: 
+    radial-gradient(#64FFDA 1px, transparent 1px),
+    radial-gradient(#8892B0 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
+  animation: v2-bg-scroll 50s linear infinite;
+}
+
+@keyframes v2-bg-scroll {
+  0% {
+    background-position: 0 0, 25px 25px;
+  }
+  100% {
+    background-position: 50px 50px, 75px 75px;
+  }
 }
